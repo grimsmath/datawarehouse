@@ -4,7 +4,7 @@
  */
 package com.jetsonfuzz.java.main;
 
-import com.jetsonfuzz.java.gui.SimpleFrame;
+import com.jetsonfuzz.java.gui.Launcher;
 
 /**
  *
@@ -14,7 +14,7 @@ public class MainClass {
     public static void main(String[] args) {
         Properties props = new Properties();
         if (props.loadProperties()) {
-            new SimpleFrame(props).setVisible(true);
+            new Launcher(props).setVisible(true);
         } else {
             Util.log("Failed to load properties file, exiting...");
         }

@@ -83,6 +83,7 @@ public class Database {
         rs = stmt.executeQuery(query);
         
         stmt.close();
+        this._conn.close();
         
         // Return the resultset back to the caller
         return rs;
