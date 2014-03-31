@@ -4,13 +4,15 @@
  */
 package com.jetsonfuzz.java.dw;
 
-import com.jetsonfuzz.java.main.Util;
 import com.jetsonfuzz.java.main.Properties;
+import com.jetsonfuzz.java.main.Util;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,6 +21,7 @@ import java.util.Map;
 public class Database {
     private Properties _prop = null;
     private Connection _conn = null;
+    private static final Logger logger = Logger.getLogger(Database.class.getName());
     
     public Database(Properties props) {
         this._prop = props;
@@ -35,7 +38,7 @@ public class Database {
         try {
             Class.forName(this._prop.getProperty("driver"));
         } catch (ClassNotFoundException e) {
-            Util.log("JDBC driver not found!");
+            logger.log(Level.SEVERE, "JDBC driver not found.");
             e.printStackTrace();
         } // end try_catch
 
@@ -52,7 +55,7 @@ public class Database {
                             this._prop.getProperty("password"));
 
         } catch (SQLException e) {
-            Util.log("Connection Failed! Check output console");
+            logger.log(Level.SEVERE, "Connection failed!");
             e.printStackTrace();
         } // end try_catch
 

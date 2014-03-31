@@ -8,6 +8,7 @@ import com.jetsonfuzz.java.dw.Database;
 import com.jetsonfuzz.java.main.Properties;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
 
 /**
  *
@@ -63,10 +64,10 @@ public class SimpleFrame extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         listTargetTables = new javax.swing.JList();
-        btnAddTable1 = new javax.swing.JButton();
-        btnAddAllTables1 = new javax.swing.JButton();
-        btnRemoveTable1 = new javax.swing.JButton();
-        btnRemoveAllTables1 = new javax.swing.JButton();
+        btnAddTable = new javax.swing.JButton();
+        btnAddAllTables = new javax.swing.JButton();
+        btnRemoveTable = new javax.swing.JButton();
+        btnRemoveAllTables = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -193,7 +194,7 @@ public class SimpleFrame extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(lblConnectionStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                .add(lblConnectionStatus, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -243,13 +244,28 @@ public class SimpleFrame extends javax.swing.JFrame {
 
         jScrollPane4.setViewportView(listTargetTables);
 
-        btnAddTable1.setText(">");
+        btnAddTable.setText(">");
+        btnAddTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddTableActionPerformed(evt);
+            }
+        });
 
-        btnAddAllTables1.setText(">>");
+        btnAddAllTables.setText(">>");
+        btnAddAllTables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddAllTablesActionPerformed(evt);
+            }
+        });
 
-        btnRemoveTable1.setText("<");
+        btnRemoveTable.setText("<");
+        btnRemoveTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveTableActionPerformed(evt);
+            }
+        });
 
-        btnRemoveAllTables1.setText("<<");
+        btnRemoveAllTables.setText("<<");
 
         org.jdesktop.layout.GroupLayout jPanel4Layout = new org.jdesktop.layout.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -263,10 +279,10 @@ public class SimpleFrame extends javax.swing.JFrame {
                         .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 170, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                         .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(btnAddTable1)
-                            .add(btnAddAllTables1)
-                            .add(btnRemoveTable1)
-                            .add(btnRemoveAllTables1))))
+                            .add(btnAddTable)
+                            .add(btnAddAllTables)
+                            .add(btnRemoveTable)
+                            .add(btnRemoveAllTables))))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(jPanel4Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel10)
@@ -290,13 +306,13 @@ public class SimpleFrame extends javax.swing.JFrame {
                             .add(jScrollPane3)
                             .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel4Layout.createSequentialGroup()
                                 .add(0, 0, Short.MAX_VALUE)
-                                .add(btnAddTable1)
+                                .add(btnAddTable)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(btnAddAllTables1)
+                                .add(btnAddAllTables)
                                 .add(35, 35, 35)
-                                .add(btnRemoveTable1)
+                                .add(btnRemoveTable)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(btnRemoveAllTables1)
+                                .add(btnRemoveAllTables)
                                 .add(50, 50, 50)))))
                 .addContainerGap())
         );
@@ -312,22 +328,22 @@ public class SimpleFrame extends javax.swing.JFrame {
                         .add(0, 0, Short.MAX_VALUE)
                         .add(btnQuit))
                     .add(layout.createSequentialGroup()
-                        .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                            .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(jPanel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 23, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
                     .add(jPanel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -389,6 +405,39 @@ public class SimpleFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnTestActionPerformed
 
+    private void btnAddTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTableActionPerformed
+        // Get the selected tables from the source list
+        int[] selectedIndices = this.listSourceTables.getSelectedIndices();
+        
+        // Add those tables into a new list model
+        DefaultListModel<String> model = new DefaultListModel<>();
+        
+        for (int id : selectedIndices) {
+            model.addElement(this.listSourceTables.getModel().getElementAt(id).toString());
+        }
+        
+        this.listTargetTables.setModel(model);
+    }//GEN-LAST:event_btnAddTableActionPerformed
+
+    private void btnAddAllTablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllTablesActionPerformed
+        // Copy the model from the source table list to the destination table
+        ListModel model = this.listSourceTables.getModel();
+        
+        this.listTargetTables.setModel(model);
+    }//GEN-LAST:event_btnAddAllTablesActionPerformed
+
+    private void btnRemoveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTableActionPerformed
+        int[] selectedIndices = this.listTargetTables.getSelectedIndices();
+        
+        DefaultListModel model = (DefaultListModel) this.listTargetTables.getModel();
+        
+        for (int id : selectedIndices) {
+            model.remove(id);
+        }
+        
+        this.listTargetTables.setModel(model);
+    }//GEN-LAST:event_btnRemoveTableActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -432,11 +481,11 @@ public class SimpleFrame extends javax.swing.JFrame {
     private javax.swing.JPasswordField Password;
     private javax.swing.JTextField ServiceName;
     private javax.swing.JTextField Username;
-    private javax.swing.JButton btnAddAllTables1;
-    private javax.swing.JButton btnAddTable1;
+    private javax.swing.JButton btnAddAllTables;
+    private javax.swing.JButton btnAddTable;
     private javax.swing.JButton btnQuit;
-    private javax.swing.JButton btnRemoveAllTables1;
-    private javax.swing.JButton btnRemoveTable1;
+    private javax.swing.JButton btnRemoveAllTables;
+    private javax.swing.JButton btnRemoveTable;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnTest;
     private javax.swing.JLabel jLabel1;
