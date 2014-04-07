@@ -199,7 +199,7 @@ public class Launcher extends javax.swing.JFrame {
     }//GEN-LAST:event_linkConnectActionPerformed
 
     private void linkDimensionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkDimensionalActionPerformed
-        SelectTablePanel selectPanel = new SelectTablePanel();
+        SelectTablePanel selectPanel = new SelectTablePanel(this._props, this._db);
         JOptionPane pane = new JOptionPane(selectPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         JDialog dialog = pane.createDialog(null, "Select Dimensional Tables");
         dialog.setVisible(true);

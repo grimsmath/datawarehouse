@@ -6,19 +6,53 @@
 
 package com.jetsonfuzz.java.gui;
 
+import com.jetsonfuzz.java.dw.Database;
+import com.jetsonfuzz.java.main.Properties;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.ListModel;
+
 /**
  *
  * @author dking
  */
 public class SelectTablePanel extends javax.swing.JPanel {
-
+    public Properties _props = null;
+    public Database _db = null;
+    
     /**
      * Creates new form SelectTablePanel
+     * @param props
+     * @param db
      */
-    public SelectTablePanel() {
+    public SelectTablePanel(Properties props, Database db) {
+        this._props = props;
+        this._db = db;
+        
         initComponents();
+        
+        load();
     }
 
+    private void load() {
+        // Retrieve the tables in the default schema
+        if (! this._db.isConnected()) {
+            this._db.connect();
+        }
+        
+        ArrayList<String> tables = this._db.getTables();
+        DefaultListModel<String> model = new DefaultListModel<>();
+
+        for(String table : tables) {
+            model.addElement(table);
+        }
+
+        this.listSource.setModel(model);
+        
+        // Close the connection
+        this._db.disconnect();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,31 +73,43 @@ public class SelectTablePanel extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         btnAddTable = new javax.swing.JButton();
 
-        listSource.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
+        setName(""); // NOI18N
+
         jScrollPane1.setViewportView(listSource);
 
         btnAddAll.setText(">>");
-
-        listSelected.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        btnAddAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddAllActionPerformed(evt);
+            }
         });
+
         jScrollPane2.setViewportView(listSelected);
 
         btnRemoveAll.setText("<<");
+        btnRemoveAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveAllActionPerformed(evt);
+            }
+        });
 
         btnRemoveTable.setText("<");
+        btnRemoveTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveTableActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Source Tables");
 
         jLabel2.setText("Selected Tables");
 
         btnAddTable.setText(">");
+        btnAddTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddTableActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -112,6 +158,47 @@ public class SelectTablePanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTableActionPerformed
+        // Get the selected tables from the source list
+        int[] selectedIndices = this.listSource.getSelectedIndices();
+        
+        // Add those tables into a new list model
+        DefaultListModel<String> model = new DefaultListModel<>();
+        
+        for (int id : selectedIndices) {
+            model.addElement(this.listSource.getModel().getElementAt(id).toString());
+            ((DefaultListModel) this.listSource.getModel()).remove(id);
+        }
+        
+        this.listSelected.setModel(model);
+    }//GEN-LAST:event_btnAddTableActionPerformed
+
+    private void btnAddAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllActionPerformed
+        // Copy the model from the source table list to the destination table
+        ListModel model = this.listSource.getModel();
+        this.listSelected.setModel(model);
+    }//GEN-LAST:event_btnAddAllActionPerformed
+
+    private void btnRemoveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTableActionPerformed
+        int[] selectedIndices = this.listSelected.getSelectedIndices();
+        
+        DefaultListModel model = (DefaultListModel) this.listSelected.getModel();
+        
+        for (int id : selectedIndices) {
+            ((DefaultListModel) this.listSource.getModel()).addElement(model.elementAt(id));
+            model.remove(id);
+        }
+        
+        this.listSelected.setModel(model);
+    }//GEN-LAST:event_btnRemoveTableActionPerformed
+
+    private void btnRemoveAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveAllActionPerformed
+        DefaultListModel<String> modelSource = 
+                (DefaultListModel<String>) this.listSelected.getModel();
+        
+        
+    }//GEN-LAST:event_btnRemoveAllActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
