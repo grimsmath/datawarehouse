@@ -37,4 +37,33 @@ public class SqlTable extends ArrayList<SqlColumn> {
     public void setNewName(String newName) {
         this._newName = newName;
     }
+    
+    @Override
+    public String toString() {
+        String text = "";
+        
+        // Open the create table command
+        text += "CREATE TABLE " + this._newName + " (";
+        
+        // This counter will be used later to determine
+        // if we need to have a comma after the column
+        int i = 0;
+        
+        // Iterate the columns
+        for (SqlColumn col : this) {
+            if (i <= this.size()) {
+                text += col.toString() + ", ";
+            } else {
+                text += col.toString();
+            }
+
+            // Increment the counter
+            i++;
+        }
+        
+        // Close the create table command
+        text += ")";
+        
+        return text;
+    }
 }

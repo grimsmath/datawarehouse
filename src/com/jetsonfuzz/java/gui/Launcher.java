@@ -6,7 +6,12 @@
 
 package com.jetsonfuzz.java.gui;
 
+import com.jetsonfuzz.java.dw.Database;
 import com.jetsonfuzz.java.main.Properties;
+import com.jetsonfuzz.java.main.Util;
+import java.awt.Color;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,13 +19,17 @@ import com.jetsonfuzz.java.main.Properties;
  */
 public class Launcher extends javax.swing.JFrame {
     private Properties _props = null;
+    private Database _db = null;
+    
     /**
      * Creates new form Launcher
+     * @param props
      */
     public Launcher(Properties props) {
         initComponents();
         
         this._props = props;
+        this._db = new Database(props);
     }
 
     /**
@@ -32,30 +41,80 @@ public class Launcher extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btnSimple = new javax.swing.JButton();
-        btnSimple1 = new javax.swing.JButton();
-        btnSimple2 = new javax.swing.JButton();
+        btnQuit = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        linkConnect = new com.jetsonfuzz.java.gui.common.JLinkButton();
+        linkInitialize = new com.jetsonfuzz.java.gui.common.JLinkButton();
+        linkFactTable = new com.jetsonfuzz.java.gui.common.JLinkButton();
+        linkDimensional = new com.jetsonfuzz.java.gui.common.JLinkButton();
+        linkReview = new com.jetsonfuzz.java.gui.common.JLinkButton();
+        linkReview1 = new com.jetsonfuzz.java.gui.common.JLinkButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        btnSimple.setText("Simple");
-        btnSimple.addActionListener(new java.awt.event.ActionListener() {
+        btnQuit.setText("Quit");
+        btnQuit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSimpleActionPerformed(evt);
+                btnQuitActionPerformed(evt);
             }
         });
 
-        btnSimple1.setText("Average");
-        btnSimple1.addActionListener(new java.awt.event.ActionListener() {
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Data Warehouse Application");
+
+        linkConnect.setText("1.  Connect to database");
+        linkConnect.setFocusable(false);
+        linkConnect.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSimple1ActionPerformed(evt);
+                linkConnectActionPerformed(evt);
             }
         });
 
-        btnSimple2.setText("Complex");
-        btnSimple2.addActionListener(new java.awt.event.ActionListener() {
+        linkInitialize.setText("2.  Initialize transaction data");
+        linkInitialize.setFocusable(false);
+        linkInitialize.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkInitialize.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSimple2ActionPerformed(evt);
+                linkInitializeActionPerformed(evt);
+            }
+        });
+
+        linkFactTable.setText("4.  Setup fact table");
+        linkFactTable.setFocusable(false);
+        linkFactTable.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkFactTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                linkFactTableActionPerformed(evt);
+            }
+        });
+
+        linkDimensional.setText("3.  Select dimensional tables");
+        linkDimensional.setFocusable(false);
+        linkDimensional.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkDimensional.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                linkDimensionalActionPerformed(evt);
+            }
+        });
+
+        linkReview.setText("5.  Review operations");
+        linkReview.setFocusable(false);
+        linkReview.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                linkReviewActionPerformed(evt);
+            }
+        });
+
+        linkReview1.setText("6.  Execute operations");
+        linkReview1.setFocusable(false);
+        linkReview1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkReview1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                linkReview1ActionPerformed(evt);
             }
         });
 
@@ -64,39 +123,142 @@ public class Launcher extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSimple2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSimple1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSimple, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(61, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnQuit))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(linkInitialize, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(linkFactTable, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(linkDimensional, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(linkReview, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(linkReview1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(linkConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 82, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(btnSimple, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSimple1, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(9, 9, 9)
+                .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(btnSimple2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addComponent(linkConnect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linkInitialize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linkDimensional, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linkFactTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linkReview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(linkReview1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(btnQuit)
+                .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSimpleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpleActionPerformed
-        new SimpleFrame(this._props).setVisible(true);
-    }//GEN-LAST:event_btnSimpleActionPerformed
+    private void linkConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkConnectActionPerformed
+        ConnectPanel conPanel = new ConnectPanel(this._props, this._db);
+        
+        JOptionPane pane = new JOptionPane(conPanel,  
+                JOptionPane.PLAIN_MESSAGE, 
+                JOptionPane.OK_CANCEL_OPTION);
+        
+        JDialog dialog = pane.createDialog(null, "Connect to Database");
+        dialog.setVisible(true);
+      
+        // Handle the OK/Cancel buttons
+        if(pane.getValue() == null) {
+            // User canceled, do nothing
+        } else {
+            // User clicked OK, Force a save on the settings
+            conPanel.saveSettings();
+                    
+            // Double-check that we can connect
+            if (this._db.connect()) {
+                // Good, now close the connection
+                this._db.disconnect();
+                
+                // Let the user know that everything is good
+                this.linkConnect.setLinkColor(Color.GREEN);
+            } else {
+                // Could not connect
+                Util.showErrorBox("Database Connection", "Failed to connect to the database!");
+                this.linkConnect.setLinkColor(Color.RED);
+            }
+        }
+    }//GEN-LAST:event_linkConnectActionPerformed
 
-    private void btnSimple1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimple1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSimple1ActionPerformed
+    private void linkDimensionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkDimensionalActionPerformed
+        SelectTablePanel selectPanel = new SelectTablePanel();
+        JOptionPane pane = new JOptionPane(selectPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = pane.createDialog(null, "Select Dimensional Tables");
+        dialog.setVisible(true);
+      
+        if(pane.getValue() == null) {
+            // User canceled
+        } else {
+            // User clicked OK
+        }
+    }//GEN-LAST:event_linkDimensionalActionPerformed
 
-    private void btnSimple2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimple2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnSimple2ActionPerformed
+    private void linkFactTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkFactTableActionPerformed
+        FactTablePanel factPanel = new FactTablePanel();
+        JOptionPane pane = new JOptionPane(factPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = pane.createDialog(null, "Setup Fact Table");
+        dialog.setVisible(true);
+      
+        if(pane.getValue() == null) {
+            // User canceled
+        } else {
+            // User clicked OK
+        }
+    }//GEN-LAST:event_linkFactTableActionPerformed
+
+    private void linkReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkReviewActionPerformed
+        ReviewPanel reviewPanel = new ReviewPanel();
+        JOptionPane pane = new JOptionPane(reviewPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = pane.createDialog(null, "Review Operations");
+        dialog.setVisible(true);
+      
+        if(pane.getValue() == null) {
+            // User canceled
+        } else {
+            // User clicked OK
+        }
+    }//GEN-LAST:event_linkReviewActionPerformed
+
+    private void linkReview1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkReview1ActionPerformed
+        // Here is where we are going to do all the work
+        // all of the other operations must be complete before we
+        // can proceed.
+    }//GEN-LAST:event_linkReview1ActionPerformed
+
+    private void btnQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btnQuitActionPerformed
+
+    private void linkInitializeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkInitializeActionPerformed
+        InitializePanel initPanel = new InitializePanel();
+        JOptionPane pane = new JOptionPane(initPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JDialog dialog = pane.createDialog(null, "Initialize Transaction Data");
+        dialog.setVisible(true);
+      
+        if(pane.getValue() == null) {
+            // User canceled
+        } else {
+            // User clicked OK
+        }
+    }//GEN-LAST:event_linkInitializeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -127,8 +289,13 @@ public class Launcher extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSimple;
-    private javax.swing.JButton btnSimple1;
-    private javax.swing.JButton btnSimple2;
+    private javax.swing.JButton btnQuit;
+    private javax.swing.JLabel jLabel1;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkConnect;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkDimensional;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkFactTable;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkInitialize;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkReview;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkReview1;
     // End of variables declaration//GEN-END:variables
 }

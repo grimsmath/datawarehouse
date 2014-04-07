@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.jetsonfuzz.java.gui;
+package com.jetsonfuzz.java.obsolete;
 
 import com.jetsonfuzz.java.dw.Database;
 import com.jetsonfuzz.java.main.Properties;

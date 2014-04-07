@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.jetsonfuzz.java.gui;
+package com.jetsonfuzz.java.obsolete;
 
 /**
  *

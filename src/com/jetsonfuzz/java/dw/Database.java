@@ -4,6 +4,7 @@
  */
 package com.jetsonfuzz.java.dw;
 
+import com.jetsonfuzz.java.main.Constants;
 import com.jetsonfuzz.java.main.Properties;
 import com.jetsonfuzz.java.main.Util;
 import java.lang.reflect.Field;
@@ -21,53 +22,73 @@ import java.util.logging.Logger;
 public class Database {
     private Properties _prop = null;
     private Connection _conn = null;
-    private static final Logger logger = Logger.getLogger(Database.class.getName());
+    private boolean _isConnected = false;
+    private static final Logger logger = 
+            Logger.getLogger(Database.class.getName());
     
     public Database(Properties props) {
         this._prop = props;
     } // end constructor
     
+    public boolean isConnected() {
+        return this._isConnected;
+    }
+    
     public Connection getConnection() {
         return this._conn;
-    } // end getConnection()
+    }
     
     public boolean connect() {
         boolean bReturn = false;
         
         // Load the driver class into memory
         try {
-            Class.forName(this._prop.getProperty("driver"));
+            Class.forName(this._prop.getProperty(Constants.DatabaseDriver));
+            // Attempt to make the connection
+            try {
+                String connString = "jdbc:oracle:thin:@" + 
+                        this._prop.getProperty(Constants.DatabaseHost) + ":" +
+                        this._prop.getProperty(Constants.DatabasePort) + ":" +
+                        this._prop.getProperty(Constants.DatabaseService);
+
+                // Establish and save the database connection
+                this._conn = DriverManager.getConnection(connString, 
+                                this._prop.getProperty(Constants.DatabaseUsername),
+                                this._prop.getProperty(Constants.DatabasePassword));
+
+                if (this._conn != null) {
+                    try {
+                        bReturn = ! this._conn.isClosed();            
+                    } catch (Exception e) {
+                        // Do something with the exception
+                        e.printStackTrace();
+                    }
+
+                    Util.log("Successfully established connection!");
+                } else {
+                    Util.log("Failed to make connection!");
+                }
+            } catch (SQLException e) {
+                logger.log(Level.SEVERE, "Connection failed!");
+                e.printStackTrace();
+            }
         } catch (ClassNotFoundException e) {
             logger.log(Level.SEVERE, "JDBC driver not found.");
             e.printStackTrace();
-        } // end try_catch
+        }
 
-        // Attempt to make the connection
-        try {
-            String connString = "jdbc:oracle:thin:@" + 
-                    this._prop.getProperty("server") + ":" +
-                    this._prop.getProperty("port") + ":" +
-                    this._prop.getProperty("serviceName");
-
-            // Establish and save the database connection
-            this._conn = DriverManager.getConnection(connString, 
-                            this._prop.getProperty("username"),
-                            this._prop.getProperty("password"));
-
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Connection failed!");
-            e.printStackTrace();
-        } // end try_catch
-
-        if (this._conn != null) {
-            bReturn = true;
-            Util.log("Successfully established connection!");
-        } else {
-            Util.log("Failed to make connection!");
-        } // end if
-        
         return bReturn;
-    } // end connect()
+    }
+    
+    public void disconnect() {
+        try {
+            if (this._conn != null) {
+                this._conn.close();
+            }            
+        } catch (Exception ex) {
+            // do something with the exception
+        }
+    }
     
     public ResultSet executeQuery(String query) throws SQLException {
         ResultSet rs = null;
@@ -76,7 +97,7 @@ public class Database {
         if (this._conn == null) {
             // Not connected, so connect!
             this.connect();
-        } // end if
+        }
         
         // Create and execute the 
         Statement stmt = this._conn.createStatement();
@@ -87,16 +108,16 @@ public class Database {
         
         // Return the resultset back to the caller
         return rs;
-    } // end executeQuery()
+    }
     
     public ArrayList<String> getTables() {
-        ArrayList<String> tables = new ArrayList<String>();
+        ArrayList<String> tables = new ArrayList<>();
         String[] types = {"TABLE"};
         
         try {
             DatabaseMetaData dmd = this._conn.getMetaData();
             ResultSet rs = dmd.getTables(null, 
-                                         this._prop.getProperty("username").toUpperCase(), 
+                                         this._prop.getProperty(Constants.DatabaseUsername).toUpperCase(), 
                                          "%", 
                                          types);
             while (rs.next()) {
