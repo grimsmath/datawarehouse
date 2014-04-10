@@ -12,7 +12,6 @@ import com.jetsonfuzz.java.dw.Warehouse;
 import com.jetsonfuzz.java.main.Properties;
 import com.jetsonfuzz.java.main.Util;
 import java.awt.Color;
-import java.util.ArrayList;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -236,16 +235,16 @@ public class Launcher extends JFrame {
             for (SqlTable table : this._dw.getNewTables()) {
                 if (! table.isCustomTable()) {
                     table.setNewName("DIM_" + table.getOriginalName());
+                    table.setDimensionalTable(true);
                 }
             }
-            
-            
         }
     }//GEN-LAST:event_linkDimensionalActionPerformed
 
     private void linkFactTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkFactTableActionPerformed
         FactTablePanel factPanel = new FactTablePanel(this._props, this._db, this._dw);
-        JOptionPane pane = new JOptionPane(factPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        JOptionPane pane = new JOptionPane(factPanel,  
+                JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         JDialog dialog = pane.createDialog(null, "Setup Fact Table");
         dialog.setVisible(true);
       
@@ -257,8 +256,9 @@ public class Launcher extends JFrame {
     }//GEN-LAST:event_linkFactTableActionPerformed
 
     private void linkReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkReviewActionPerformed
-        ReviewPanel reviewPanel = new ReviewPanel();
-        JOptionPane pane = new JOptionPane(reviewPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        ReviewPanel reviewPanel = new ReviewPanel(this._props, this._db, this._dw);
+        JOptionPane pane = new JOptionPane(reviewPanel,  
+                JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         JDialog dialog = pane.createDialog(null, "Review Operations");
         dialog.setVisible(true);
       

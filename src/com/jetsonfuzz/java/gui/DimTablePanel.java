@@ -78,7 +78,7 @@ public class DimTablePanel extends javax.swing.JPanel {
         this.listSourceTables.setModel(this._modelTables);
         
         ArrayList<SqlTable> tables = this._db.getSqlTables();
-        
+                
         for (SqlTable table : tables) {
             this._modelTables.addElement(table);
         }
@@ -121,15 +121,17 @@ public class DimTablePanel extends javax.swing.JPanel {
         this.listKeyAttributes.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (! e.isTemporary()) {
-                    JList list = (JList) e.getSource();
-                    list.clearSelection();
-                }
+                // Not implemented
             }
 
             @Override
             public void focusGained(FocusEvent e) {
-                // not implemented
+                if (! e.isTemporary()) {
+                    if (e.getOppositeComponent() instanceof JList) {
+                        JList list = (JList) e.getSource();
+                        list.clearSelection();
+                    }
+                }
             }
         });
     }
@@ -153,15 +155,17 @@ public class DimTablePanel extends javax.swing.JPanel {
         this.listNonKeyAttributes.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (! e.isTemporary()) {
-                    JList list = (JList) e.getSource();
-                    list.clearSelection();
-                }
+                // Not implemented
             }
 
             @Override
             public void focusGained(FocusEvent e) {
-                // not implemented
+                if (! e.isTemporary()) {
+                    if (e.getOppositeComponent() instanceof JList) {
+                        JList list = (JList) e.getSource();
+                        list.clearSelection();
+                    }
+                }
             }
         });
     }

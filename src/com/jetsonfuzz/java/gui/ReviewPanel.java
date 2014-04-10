@@ -6,19 +6,52 @@
 
 package com.jetsonfuzz.java.gui;
 
+import com.jetsonfuzz.java.dw.Database;
+import com.jetsonfuzz.java.dw.SqlTable;
+import com.jetsonfuzz.java.dw.Warehouse;
+import com.jetsonfuzz.java.main.Properties;
+
 /**
  *
  * @author dking
  */
 public class ReviewPanel extends javax.swing.JPanel {
-
+    private Properties _props = null;
+    private Database _db = null;
+    private Warehouse _dw = null;
+    
+    
     /**
      * Creates new form ReviewPanel
+     * @param props
+     * @param db
+     * @param dw
      */
-    public ReviewPanel() {
+    public ReviewPanel(Properties props, Database db, Warehouse dw) {
+        this._props = props;
+        this._db = db;
+        this._dw = dw;
+        
         initComponents();
     }
 
+    private void renderSQL() {
+        String text = "";
+        
+        // Show all the create commands
+        for (SqlTable table : this._dw.getNewTables()) {
+            text += table.toString();
+        }
+        
+        for (SqlTable table : this._dw.getFactTables()) {
+            text += table.toString();
+        }
+        
+        // Show all the insert commands
+        
+        this.txtSQL.setText(text);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,38 +61,55 @@ public class ReviewPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        textReview = new javax.swing.JTextArea();
+        txtSQL = new javax.swing.JTextArea();
 
-        textReview.setColumns(20);
-        textReview.setRows(5);
-        jScrollPane1.setViewportView(textReview);
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Generated SQL DDL/DML"));
+
+        txtSQL.setColumns(20);
+        txtSQL.setRows(5);
+        jScrollPane1.setViewportView(txtSQL);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 481, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 468, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea textReview;
+    private javax.swing.JTextArea txtSQL;
     // End of variables declaration//GEN-END:variables
 }

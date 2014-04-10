@@ -17,7 +17,8 @@ public class SqlTable {
     private ArrayList<SqlColumn> _primaryKeys = null;
     private ArrayList<SqlColumn> _foreignKeys = null;
     private boolean _isCustomTable = false;
-    
+    private boolean _isDimensionTable = false;
+        
     public SqlTable() {
         super();
     }
@@ -75,6 +76,14 @@ public class SqlTable {
         this._foreignKeys = keys;
     }
     
+    public boolean isDimensionalTable() {
+        return this._isDimensionTable;
+    }
+    
+    public void setDimensionalTable(boolean isDimensionalTable) {
+        this._isDimensionTable = isDimensionalTable;
+    }
+    
     public String getCreateCommand() {
         String text = "";
         String tableName = (this._newName.isEmpty()) 
@@ -82,7 +91,7 @@ public class SqlTable {
                 : this._newName;
         
         // Open the create table command
-        text += "CREATE TABLE " + tableName + " (";
+        text += "CREATE TABLE " + tableName + " (\n";
         
         // This counter will be used later to determine
         // if we need to have a comma after the column
@@ -90,8 +99,10 @@ public class SqlTable {
         
         // Iterate the columns
         for (SqlColumn col : this._columns) {
+            text += "\t";
+
             if ((i + 1) < this._columns.size()) {
-                text += col.toString() + ", ";
+                text += col.toString() + ",\n";
             } else {
                 text += col.toString();
             }
@@ -101,13 +112,17 @@ public class SqlTable {
         }
         
         // Close the create table command
-        text += ")";
+        text += "\n)";
         
         return text;        
     }
     
     @Override
     public String toString() {
-        return this._newName;
+        if (this._isDimensionTable) {
+            return this._newName;
+        } else {
+            return this._originalName;
+        }
     }
 }

@@ -70,7 +70,10 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.setupTableList();
         this.setupColumnList();
         this.setupKeyList();
-        this.setupNonKeyList();    
+        this.setupNonKeyList();   
+        
+        this.lblTableName.setText("Table Name: (NOTE: Fact tables are automatically pref ixed with \"" + 
+                Constants.FactTablePrefix + "\" to avoid collisions with other tables)");
     }
     
     private void setupTableList() {
@@ -120,15 +123,20 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.listKeys.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (! e.isTemporary()) {
-                    JList list = (JList) e.getSource();
-                    list.clearSelection();
-                }
+//                if (! e.isTemporary()) {
+//                    JList list = (JList) e.getSource();
+//                    list.clearSelection();
+//                }
             }
 
             @Override
             public void focusGained(FocusEvent e) {
-                // not implemented
+                if (! e.isTemporary()) {
+                    if (e.getOppositeComponent() instanceof JList) {
+                        JList list = (JList) e.getOppositeComponent();
+                        list.clearSelection();
+                    }
+                }
             }
         });
     }
@@ -154,15 +162,21 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.listNonKeys.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-                if (! e.isTemporary()) {
-                    JList list = (JList) e.getSource();
-                    list.clearSelection();
-                }
+//                if (! e.isTemporary()) {
+//                    JList list = (JList) e.getSource();
+//                    list.clearSelection();
+//                }
             }
 
             @Override
             public void focusGained(FocusEvent e) {
                 // not implemented
+                if (! e.isTemporary()) {
+                    if (e.getOppositeComponent() instanceof JList) {
+                        JList list = (JList) e.getOppositeComponent();
+                        list.clearSelection();
+                    }
+                }
             }
         });
     }
@@ -212,7 +226,7 @@ public class FactTablePanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        lblTableName = new javax.swing.JLabel();
         txtFactName = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         txtAttributeName = new javax.swing.JTextField();
@@ -246,7 +260,7 @@ public class FactTablePanel extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Step 1: Define Fact Table"));
 
-        jLabel1.setText("Fact Table Name:");
+        lblTableName.setText("Fact Table Name:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -256,7 +270,7 @@ public class FactTablePanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblTableName)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(txtFactName))
                 .addContainerGap())
@@ -265,7 +279,7 @@ public class FactTablePanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(lblTableName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFactName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(15, Short.MAX_VALUE))
@@ -449,6 +463,11 @@ public class FactTablePanel extends javax.swing.JPanel {
         jScrollPane4.setViewportView(listNonKeys);
 
         btnRemoveAttr.setText("Remove Non-Key");
+        btnRemoveAttr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveAttrActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -605,6 +624,16 @@ public class FactTablePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnSaveTableActionPerformed
 
+    private void btnRemoveAttrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveAttrActionPerformed
+        int [] selectedItems = this.listNonKeys.getSelectedIndices();
+        
+        for (int i : selectedItems) {
+            this._nonKeyModel.removeElementAt(i);
+        }
+        
+        this.listNonKeys.updateUI();
+    }//GEN-LAST:event_btnRemoveAttrActionPerformed
+
     private SqlTable saveTableDetails() {
         SqlTable newTable = new SqlTable();
 
@@ -655,7 +684,6 @@ public class FactTablePanel extends javax.swing.JPanel {
     private javax.swing.JCheckBox cbxAutoIncrement;
     private javax.swing.JCheckBox cbxNullable;
     private javax.swing.JCheckBox cbxPrimaryKey;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
@@ -670,6 +698,7 @@ public class FactTablePanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblAttrOrigName;
+    private javax.swing.JLabel lblTableName;
     private javax.swing.JList listColumn;
     private javax.swing.JList listKeys;
     private javax.swing.JList listNonKeys;
