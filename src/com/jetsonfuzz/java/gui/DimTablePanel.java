@@ -33,8 +33,6 @@ public class DimTablePanel extends javax.swing.JPanel {
     private Properties _props = null;
     private Database _db = null;
     private Warehouse _dw = null;
-    
-    private String _tableName = "";
     private DefaultListModel<SqlTable> _modelTables = null;
     private DefaultListModel<SqlColumn> _modelColumns = null;
     private DefaultListModel<SqlColumn> _modelKeys = null;
@@ -50,7 +48,6 @@ public class DimTablePanel extends javax.swing.JPanel {
         this._props = props;
         this._db = db;
         this._dw = dw;
-
         this._modelTables = new DefaultListModel<>();
         this._modelColumns = new DefaultListModel<>();
         this._modelKeys = new DefaultListModel<>();
@@ -589,9 +586,7 @@ public class DimTablePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnSaveCustomTableActionPerformed
 
     private SqlTable saveTableDetails() {
-        SqlTable newTable = null;
-
-        newTable = new SqlTable();
+        SqlTable newTable = new SqlTable();
 
         newTable.setOriginalName(this.txtTableName.getText());
         newTable.setNewName(Constants.NewTablePrefix + this.txtTableName.getText());

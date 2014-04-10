@@ -21,4 +21,5 @@ public interface Constants {
     
     // SQL PROPERTIES
     public static String NewTablePrefix = "DIM_";
+    public static String FactTablePrefix = "FACT_";
 }
