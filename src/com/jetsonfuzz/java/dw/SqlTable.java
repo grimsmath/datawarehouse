@@ -4,22 +4,27 @@
  */
 package com.jetsonfuzz.java.dw;
 
-import com.jetsonfuzz.java.main.Properties;
 import java.util.ArrayList;
 
 /**
  *
  * @author dking
  */
-public class SqlTable extends ArrayList<SqlColumn> {
+public class SqlTable {
     private String _originalName = "";
     private String _newName = "";
-    private Properties _props = null;
+    private ArrayList<SqlColumn> _columns = null;
+    private ArrayList<SqlColumn> _primaryKeys = null;
+    private ArrayList<SqlColumn> _foreignKeys = null;
+    private boolean _isCustomTable = false;
     
-    public SqlTable(Properties props) {
+    public SqlTable() {
         super();
-        
-        this._props = props;
+    }
+
+    public SqlTable(String tableName) {
+        this._originalName = tableName;
+        this._newName = tableName;
     }
     
     public String getOriginalName() {
@@ -38,20 +43,54 @@ public class SqlTable extends ArrayList<SqlColumn> {
         this._newName = newName;
     }
     
-    @Override
-    public String toString() {
+    public boolean isCustomTable() {
+        return this._isCustomTable;
+    }
+    
+    public void setCustomTable(boolean isCustom) {
+        this._isCustomTable = isCustom;
+    }
+    
+    public ArrayList<SqlColumn> getColumns() {
+        return this._columns;
+    }
+    
+    public void setColumns(ArrayList<SqlColumn> columns) {
+        this._columns = columns;
+    }
+    
+    public ArrayList<SqlColumn> getPrimaryKeys() {
+        return this._primaryKeys;
+    }
+    
+    public void setPrimaryKeys(ArrayList<SqlColumn> keys) {
+        this._primaryKeys = keys;
+    }
+    
+    public ArrayList<SqlColumn> getForeignKeys() {
+        return this._foreignKeys;
+    }
+    
+    public void setForeignKeys(ArrayList<SqlColumn> keys) {
+        this._foreignKeys = keys;
+    }
+    
+    public String getCreateCommand() {
         String text = "";
+        String tableName = (this._newName.isEmpty()) 
+                ? this._originalName 
+                : this._newName;
         
         // Open the create table command
-        text += "CREATE TABLE " + this._newName + " (";
+        text += "CREATE TABLE " + tableName + " (";
         
         // This counter will be used later to determine
         // if we need to have a comma after the column
         int i = 0;
         
         // Iterate the columns
-        for (SqlColumn col : this) {
-            if (i <= this.size()) {
+        for (SqlColumn col : this._columns) {
+            if ((i + 1) < this._columns.size()) {
                 text += col.toString() + ", ";
             } else {
                 text += col.toString();
@@ -64,6 +103,11 @@ public class SqlTable extends ArrayList<SqlColumn> {
         // Close the create table command
         text += ")";
         
-        return text;
+        return text;        
+    }
+    
+    @Override
+    public String toString() {
+        return this._newName;
     }
 }

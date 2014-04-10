@@ -7,50 +7,63 @@
 package com.jetsonfuzz.java.gui;
 
 import com.jetsonfuzz.java.dw.Database;
+import com.jetsonfuzz.java.dw.SqlTable;
+import com.jetsonfuzz.java.dw.Warehouse;
 import com.jetsonfuzz.java.main.Properties;
+import com.jetsonfuzz.java.main.Util;
 import java.util.ArrayList;
 import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author dking
  */
 public class SelectTablePanel extends javax.swing.JPanel {
-    public Properties _props = null;
-    public Database _db = null;
+    private Properties _props = null;
+    private Database _db = null;
+    private Warehouse _dw = null;
+    private DefaultListModel<SqlTable> _modelSource = null;
+    private DefaultListModel<SqlTable> _modelDest = null;
     
     /**
      * Creates new form SelectTablePanel
      * @param props
      * @param db
+     * @param dw
      */
-    public SelectTablePanel(Properties props, Database db) {
+    public SelectTablePanel(Properties props, Database db, Warehouse dw) {
         this._props = props;
         this._db = db;
+        this._dw = dw;
+        this._modelSource = new DefaultListModel<>();
+        this._modelDest = new DefaultListModel<>();
         
         initComponents();
+        
+        this.listSource.setModel(_modelSource);
+        this.listSelected.setModel(_modelDest);
         
         load();
     }
 
     private void load() {
-        // Retrieve the tables in the default schema
-        if (! this._db.isConnected()) {
-            this._db.connect();
-        }
-        
-        ArrayList<String> tables = this._db.getTables();
-        DefaultListModel<String> model = new DefaultListModel<>();
-
-        for(String table : tables) {
-            model.addElement(table);
+        for(SqlTable table : this._dw.getOriginalTables()) {
+            this._modelSource.addElement(table);
         }
 
-        this.listSource.setModel(model);
+        this.listSource.setModel(this._modelSource);
+    }
+    
+    public ArrayList<SqlTable> saveTables() {
+        ArrayList<SqlTable> tables = new ArrayList<>();
         
-        // Close the connection
-        this._db.disconnect();
+        for (int i = 0; i < this._modelDest.getSize(); i++) {
+            tables.add(this._modelDest.getElementAt(i));
+        }
+        
+        return tables;
     }
     
     /**
@@ -62,20 +75,20 @@ public class SelectTablePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listSource = new javax.swing.JList();
         btnAddAll = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        listSelected = new javax.swing.JList();
         btnRemoveAll = new javax.swing.JButton();
         btnRemoveTable = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         btnAddTable = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listSource = new javax.swing.JList();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listSelected = new javax.swing.JList();
+        btnAddCustomTable = new javax.swing.JButton();
+        btnRemoveCustomTable = new javax.swing.JButton();
 
         setName(""); // NOI18N
-
-        jScrollPane1.setViewportView(listSource);
 
         btnAddAll.setText(">>");
         btnAddAll.addActionListener(new java.awt.event.ActionListener() {
@@ -83,8 +96,6 @@ public class SelectTablePanel extends javax.swing.JPanel {
                 btnAddAllActionPerformed(evt);
             }
         });
-
-        jScrollPane2.setViewportView(listSelected);
 
         btnRemoveAll.setText("<<");
         btnRemoveAll.addActionListener(new java.awt.event.ActionListener() {
@@ -100,10 +111,6 @@ public class SelectTablePanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setText("Source Tables");
-
-        jLabel2.setText("Selected Tables");
-
         btnAddTable.setText(">");
         btnAddTable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,51 +118,110 @@ public class SelectTablePanel extends javax.swing.JPanel {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Source Tables"));
+
+        jScrollPane1.setViewportView(listSource);
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 260, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Dimension Tables"));
+
+        jScrollPane2.setViewportView(listSelected);
+
+        btnAddCustomTable.setText("Add Custom Table");
+        btnAddCustomTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddCustomTableActionPerformed(evt);
+            }
+        });
+
+        btnRemoveCustomTable.setText("Remove Custom Table");
+        btnRemoveCustomTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveCustomTableActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnAddCustomTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnRemoveCustomTable, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAddCustomTable)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemoveCustomTable))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 299, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(72, Short.MAX_VALUE)))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnAddAll)
-                        .addComponent(btnAddTable))
-                    .addComponent(btnRemoveAll)
-                    .addComponent(btnRemoveTable))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAddAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnAddTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveAll, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnRemoveTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                            .addComponent(jScrollPane2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addComponent(btnAddTable)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAddAll)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRemoveTable)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRemoveAll)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(122, 122, 122)
+                .addComponent(btnAddTable)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnAddAll)
+                .addGap(18, 18, 18)
+                .addComponent(btnRemoveTable)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemoveAll)
+                .addContainerGap(145, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -163,51 +229,112 @@ public class SelectTablePanel extends javax.swing.JPanel {
         // Get the selected tables from the source list
         int[] selectedIndices = this.listSource.getSelectedIndices();
         
-        // Add those tables into a new list model
-        DefaultListModel<String> model = new DefaultListModel<>();
-        
         for (int id : selectedIndices) {
-            model.addElement(this.listSource.getModel().getElementAt(id).toString());
-            ((DefaultListModel) this.listSource.getModel()).remove(id);
+            this._modelDest.addElement(this._modelSource.getElementAt(id));
+            this._modelSource.removeElementAt(id);
         }
         
-        this.listSelected.setModel(model);
+        this.listSource.updateUI();
+        this.listSelected.updateUI();
     }//GEN-LAST:event_btnAddTableActionPerformed
 
     private void btnAddAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllActionPerformed
-        // Copy the model from the source table list to the destination table
-        ListModel model = this.listSource.getModel();
-        this.listSelected.setModel(model);
+        for (int i = 0; i < this._modelSource.getSize(); i++) {
+            this._modelDest.addElement(this._modelSource.getElementAt(i));
+        }
+        
+        // Remove the items from the source
+        this._modelSource.clear();
+        
+        // Update the UI
+        this.listSelected.updateUI();
+        this.listSource.updateUI();
     }//GEN-LAST:event_btnAddAllActionPerformed
 
     private void btnRemoveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTableActionPerformed
         int[] selectedIndices = this.listSelected.getSelectedIndices();
         
-        DefaultListModel model = (DefaultListModel) this.listSelected.getModel();
-        
         for (int id : selectedIndices) {
-            ((DefaultListModel) this.listSource.getModel()).addElement(model.elementAt(id));
-            model.remove(id);
+            SqlTable table = (SqlTable) this._modelDest.getElementAt(id);
+            
+            if (! table.isCustomTable()) {
+                this._modelSource.addElement(this._modelDest.getElementAt(id));
+                this._modelDest.removeElementAt(id);
+            }
         }
         
-        this.listSelected.setModel(model);
+        this.listSelected.updateUI();
+        this.listSource.updateUI();
     }//GEN-LAST:event_btnRemoveTableActionPerformed
 
     private void btnRemoveAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveAllActionPerformed
-        DefaultListModel<String> modelSource = 
-                (DefaultListModel<String>) this.listSelected.getModel();
+        for (int i = 0; i < this._modelDest.getSize(); i++) {
+            SqlTable table = (SqlTable) this._modelDest.getElementAt(i);
+            if (! table.isCustomTable()) {
+                this._modelSource.addElement(this._modelDest.getElementAt(i));
+            }
+        }
         
+        for (Object obj : this._modelDest.toArray()) {
+            SqlTable table = (SqlTable) obj;
+            if (! table.isCustomTable()) {
+                this._modelDest.removeElement(obj);
+            }
+        }
         
+        this.listSelected.updateUI();
+        this.listSource.updateUI();
     }//GEN-LAST:event_btnRemoveAllActionPerformed
+
+    private void btnAddCustomTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCustomTableActionPerformed
+        DimTablePanel dimPanel = new DimTablePanel(this._props, this._db, this._dw);
+        
+        JOptionPane pane = new JOptionPane(dimPanel,  
+                JOptionPane.PLAIN_MESSAGE, 
+                JOptionPane.OK_CANCEL_OPTION);
+        
+        JDialog dialog = pane.createDialog(null, "Define Dimension Table");
+        dialog.setVisible(true);
+      
+        // Handle the OK/Cancel buttons
+        if(pane.getValue() == null) {
+            // User canceled, do nothing
+        } else {
+            // User clicked OK, do something
+            for (SqlTable table : this._dw.getNewTables()) {
+                this._modelDest.addElement(table);
+            }
+            
+            this.listSelected.updateUI();
+        }
+    }//GEN-LAST:event_btnAddCustomTableActionPerformed
+
+    private void btnRemoveCustomTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveCustomTableActionPerformed
+        int [] selectedIndices = this.listSelected.getSelectedIndices();
+        
+        for (int i : selectedIndices) {
+            SqlTable table = (SqlTable) this._modelDest.getElementAt(i);
+            if (table.isCustomTable()) {
+                this._modelDest.removeElementAt(i);
+            } else {
+                Util.showInfoBox("Remove Custom Table", 
+                        "You cannot remove a table copied from an existing table.");
+            }
+        }
+        
+        this.listSelected.updateUI();
+    }//GEN-LAST:event_btnRemoveCustomTableActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddAll;
+    private javax.swing.JButton btnAddCustomTable;
     private javax.swing.JButton btnAddTable;
     private javax.swing.JButton btnRemoveAll;
+    private javax.swing.JButton btnRemoveCustomTable;
     private javax.swing.JButton btnRemoveTable;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList listSelected;

@@ -1,0 +1,10 @@
+DROP TABLE visit_procedure;
+DROP TABLE visit_prescription;
+DROP TABLE visit;
+DROP TABLE procedures;
+DROP TABLE patient;
+DROP TABLE guardian;
+DROP TABLE doctor;
+DROP TABLE employee;
+DROP TABLE branch;
+DROP TABLE prescription;

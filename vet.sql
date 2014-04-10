@@ -137,3 +137,5 @@ REFERENCES prescription (script_id),
 CONSTRAINT fk_visproc_visitid FOREIGN KEY (visit_id)
 REFERENCES visit (visit_id)
 );
+
+commit;

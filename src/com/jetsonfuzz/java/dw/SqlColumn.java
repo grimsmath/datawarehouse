@@ -5,6 +5,7 @@
 package com.jetsonfuzz.java.dw;
 
 import com.jetsonfuzz.java.main.Util;
+import java.util.Map;
 
 /**
  *
@@ -20,6 +21,10 @@ public class SqlColumn {
     private boolean _isPrimaryKey = false;
     private boolean _isForeignKey = false;
     private boolean _isUnique = false;
+
+    // We need to know the original table this column originated from
+    // in order to copy the data from the original table into this one
+    private SqlTable _originalTable = null;
     
     public String getOriginalName() {
         return this._originalName;
@@ -93,46 +98,66 @@ public class SqlColumn {
         this._isUnique = isUnique;
     }
     
+    public SqlTable getOriginalTable() {
+        return this._originalTable;
+    }
+    
+    public void setOriginalTable(SqlTable originalTable) {
+        this._originalTable = originalTable;
+    }
+    
     @Override
     public String toString() {
-        String text = this._newName + " ";
+        String text = this._newName;
+        Map types = Database.getJdbcTypeName(this._dataType);
         
-        // Get the data type name
-        text += Database.getJdbcTypeName(this._dataType) + " ";
+        text += " " + types.get(this._dataType);
         
-        // Add size for integer-like data types
-        if ((this._dataType == java.sql.Types.CHAR) || 
-            (this._dataType == java.sql.Types.VARCHAR) ||
-            (this._dataType == java.sql.Types.NCHAR) ||
-            (this._dataType == java.sql.Types.NVARCHAR)) 
-        {
-            text += "(" + this._columnSize + ") ";
+        if (isNumericData(this._dataType)) {
+            text += "(" + this._columnSize + ", " + this._precision + ")";
+        } else if (isNotDateTime(this._dataType)) {
+            text += "(" + this._columnSize + ")";
+        } else {
+            // Do nothing else
         }
         
-        // Add size and precision for non-integer numeric types
-        if ((this._dataType == java.sql.Types.DECIMAL) ||
-            (this._dataType == java.sql.Types.DOUBLE) ||
-            (this._dataType == java.sql.Types.FLOAT) ||
-            (this._dataType == java.sql.Types.NUMERIC))
-        {
-            text += "(" + this._columnSize + ", " + this._precision + ") ";
-        }
-        
-        // Nulls
         if (! this._allowNull) {
-            text += "NOT NULL ";
+            text += " NOT NULL";
         }
         
-        // Is the field unique
-        if (this._isUnique) {
-            text += "UNIQUE ";
-        }
-        
-        // Primary Key
         if (this._isPrimaryKey) {
-            text += "PRIMARY KEY ";
+            text += " PRIMARY KEY";
         }
         
         return text;
+    }
+    
+    public boolean isNumericData(int dataType) {
+        boolean bReturn = false;
+        
+        if ((dataType == java.sql.Types.DECIMAL) ||
+            (dataType == java.sql.Types.DOUBLE) ||
+            (dataType == java.sql.Types.FLOAT) ||
+            (dataType == java.sql.Types.NUMERIC))
+        {
+            bReturn = true;
+        }
+        
+        return bReturn;
+    }
+    
+    public boolean isNotDateTime(int dataType) {
+        boolean bReturn = false;
+        
+        if ((dataType == java.sql.Types.DATE) ||
+            (dataType == java.sql.Types.TIME) ||
+            (dataType == java.sql.Types.TIMESTAMP))
+        {
+            Util.log("Found a date/time datatype");
+        } else {
+            bReturn = true;            
+        }
+        
+        return bReturn;        
     }
 }

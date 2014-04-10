@@ -46,4 +46,8 @@ public class Util {
             title,
             JOptionPane.ERROR_MESSAGE);
     }
+    
+    public static String cleanString(String originalString) {
+        return (originalString.replaceAll("\\s+", " "));
+    }
 }

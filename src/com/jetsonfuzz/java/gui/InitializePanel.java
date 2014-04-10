@@ -7,13 +7,6 @@
 package com.jetsonfuzz.java.gui;
 
 import com.jetsonfuzz.java.main.Util;
-import java.awt.FileDialog;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,7 +15,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author dking
  */
 public class InitializePanel extends javax.swing.JPanel {
-
+    private String _sqlStatements = "";
+    
     /**
      * Creates new form InitializePanel
      */
@@ -30,6 +24,9 @@ public class InitializePanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    public String getSQL() {
+        return this._sqlStatements;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -106,7 +103,9 @@ public class InitializePanel extends javax.swing.JPanel {
             // Load the file
             String filename = chooser.getSelectedFile().getAbsolutePath();
            
-            this.txtContents.setText(Util.readFile(filename));
+            this._sqlStatements = Util.readFile(filename);
+            this.txtContents.setText(this._sqlStatements);
+            
         }
     }//GEN-LAST:event_btnBrowseActionPerformed
 

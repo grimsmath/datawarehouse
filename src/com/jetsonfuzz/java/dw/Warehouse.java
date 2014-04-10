@@ -16,10 +16,50 @@ import java.util.ArrayList;
 public class Warehouse {
     private Properties _props = null;
     private Database _db = null;
+    private ArrayList<SqlTable> _originalTables = null;
+    private ArrayList<SqlTable> _newTables = null;
+    private ArrayList<SqlTable> _factTables = null;
     
     public Warehouse(Properties props, Database db) {
         this._props = props;
         this._db = db;
+        this._originalTables = new ArrayList<>();
+        this._newTables = new ArrayList<>();
+        this._factTables = new ArrayList<>();
+        
+        // Load the schema into memory
+        loadSchema();
+    }
+    
+    public ArrayList<SqlTable> getOriginalTables() {
+        return this._originalTables;
+    }
+    
+    public void setOriginalTables(ArrayList<SqlTable> originalTables) {
+        this._originalTables = originalTables;
+    }
+    
+    public ArrayList<SqlTable> getNewTables() {
+        return this._newTables;
+    }
+    
+    public void setNewTables(ArrayList<SqlTable> newTables) {
+        this._newTables = newTables;
+    }
+    
+    public ArrayList<SqlTable> getFactTables() {
+        return this._factTables;
+    }
+    
+    public void setFactTables(ArrayList<SqlTable> factTables) {
+        this._factTables = factTables;
+    }
+    
+    public void loadSchema() {
+        // Retrieve the existing tables in the schema
+        // We will use this to complete all the form loading later
+        // in the application
+        this._originalTables = this._db.getSqlTables();
     }
     
     public boolean execute(ArrayList<SqlTable> tables) {

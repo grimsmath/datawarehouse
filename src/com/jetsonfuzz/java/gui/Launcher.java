@@ -7,31 +7,43 @@
 package com.jetsonfuzz.java.gui;
 
 import com.jetsonfuzz.java.dw.Database;
+import com.jetsonfuzz.java.dw.SqlTable;
+import com.jetsonfuzz.java.dw.Warehouse;
 import com.jetsonfuzz.java.main.Properties;
 import com.jetsonfuzz.java.main.Util;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author dking
  */
-public class Launcher extends javax.swing.JFrame {
+public class Launcher extends JFrame {
     private Properties _props = null;
     private Database _db = null;
+    private Warehouse _dw = null;
     
     /**
      * Creates new form Launcher
      * @param props
      */
     public Launcher(Properties props) {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         initComponents();
         
         this._props = props;
-        this._db = new Database(props);
+        this._db = new Database(_props);
+        this._dw = new Warehouse(_props, _db);
     }
 
+    public void cleanup() {
+        this._db.disconnect();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -174,6 +186,7 @@ public class Launcher extends javax.swing.JFrame {
                 JOptionPane.OK_CANCEL_OPTION);
         
         JDialog dialog = pane.createDialog(null, "Connect to Database");
+        
         dialog.setVisible(true);
       
         // Handle the OK/Cancel buttons
@@ -199,20 +212,39 @@ public class Launcher extends javax.swing.JFrame {
     }//GEN-LAST:event_linkConnectActionPerformed
 
     private void linkDimensionalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkDimensionalActionPerformed
-        SelectTablePanel selectPanel = new SelectTablePanel(this._props, this._db);
-        JOptionPane pane = new JOptionPane(selectPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        SelectTablePanel selectPanel = new SelectTablePanel(this._props, this._db, this._dw);
+        
+        JOptionPane pane = new JOptionPane(selectPanel,  
+                JOptionPane.PLAIN_MESSAGE, 
+                JOptionPane.OK_CANCEL_OPTION);
+        
         JDialog dialog = pane.createDialog(null, "Select Dimensional Tables");
+        
         dialog.setVisible(true);
       
         if(pane.getValue() == null) {
             // User canceled
         } else {
-            // User clicked OK
+            // User clicked OK, do something
+            
+            // At this poine we want to save all the selected or created
+            // dimension tables to the NewTables member of the Warehouse
+            // object.  We also want to set the NewName of the tables
+            // with a prefix of "DIM_" so that we can distinguish them
+            // from existing tables
+            this._dw.setNewTables(selectPanel.saveTables());
+            for (SqlTable table : this._dw.getNewTables()) {
+                if (! table.isCustomTable()) {
+                    table.setNewName("DIM_" + table.getOriginalName());
+                }
+            }
+            
+            
         }
     }//GEN-LAST:event_linkDimensionalActionPerformed
 
     private void linkFactTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkFactTableActionPerformed
-        FactTablePanel factPanel = new FactTablePanel();
+        FactTablePanel factPanel = new FactTablePanel(this._props, this._db, this._dw);
         JOptionPane pane = new JOptionPane(factPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
         JDialog dialog = pane.createDialog(null, "Setup Fact Table");
         dialog.setVisible(true);
@@ -244,7 +276,7 @@ public class Launcher extends javax.swing.JFrame {
     }//GEN-LAST:event_linkReview1ActionPerformed
 
     private void btnQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitActionPerformed
-        System.exit(0);
+        this.dispose();
     }//GEN-LAST:event_btnQuitActionPerformed
 
     private void linkInitializeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkInitializeActionPerformed
@@ -257,6 +289,27 @@ public class Launcher extends javax.swing.JFrame {
             // User canceled
         } else {
             // User clicked OK
+            String sql = initPanel.getSQL();
+            
+            if (! sql.isEmpty()) {
+                int result = JOptionPane.showConfirmDialog(this, 
+                        "Are you sure you want to initilize the database?", 
+                        "Confirm Database Initialization", 
+                        JOptionPane.YES_NO_OPTION);
+                
+                if (result == JOptionPane.YES_OPTION) {
+                    sql = Util.cleanString(sql);
+                    
+                    String [] statements = sql.split(";", -1);
+                    
+                    // Execute the query statements
+                    for (String statement : statements) {
+                        this._db.executeQuery(statement);                    
+                    }
+                    
+                    this.linkInitialize.setLinkColor(Color.GREEN);
+                }
+            }
         }
     }//GEN-LAST:event_linkInitializeActionPerformed
 
