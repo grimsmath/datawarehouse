@@ -7,6 +7,7 @@
 package com.jetsonfuzz.java.gui;
 
 import com.jetsonfuzz.java.dw.Database;
+import com.jetsonfuzz.java.dw.SqlColumn;
 import com.jetsonfuzz.java.dw.SqlTable;
 import com.jetsonfuzz.java.dw.Warehouse;
 import com.jetsonfuzz.java.main.Properties;
@@ -33,6 +34,8 @@ public class ReviewPanel extends javax.swing.JPanel {
         this._dw = dw;
         
         initComponents();
+        
+        renderSQL();
     }
 
     private void renderSQL() {
@@ -40,11 +43,33 @@ public class ReviewPanel extends javax.swing.JPanel {
         
         // Show all the create commands
         for (SqlTable table : this._dw.getNewTables()) {
-            text += table.toString();
+            text += table.getCreateCommand() + "\n";
+            text += "\n";
+            if (! table.isCustomTable()) {
+                // Table copy insert
+                text += "INSERT INTO " + table.getNewName() + " VALUES (" +
+                        "SELECT * FROM " + table.getOriginalName() + ")\n";
+            } else {
+                // Custom table insert
+                text += "INSERT INTO " + table.getNewName() + " (";
+
+                // Label the individual columns
+                int i = 0;
+                for (SqlColumn col : table.getColumns()) {
+                    if (i++ < table.getColumns().size()) {
+                        text += col.getNewName() + ", ";
+                    } else {
+                        text += col.getNewName();
+                    }
+                }
+                
+                text += ") VALUES ("; 
+            }
+            text += "\n";
         }
         
         for (SqlTable table : this._dw.getFactTables()) {
-            text += table.toString();
+            text += table.getCreateCommand() + "\n";
         }
         
         // Show all the insert commands

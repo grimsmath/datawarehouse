@@ -9,9 +9,11 @@ package com.jetsonfuzz.java.gui;
 import com.jetsonfuzz.java.dw.Database;
 import com.jetsonfuzz.java.dw.SqlTable;
 import com.jetsonfuzz.java.dw.Warehouse;
+import com.jetsonfuzz.java.main.Constants;
 import com.jetsonfuzz.java.main.Properties;
 import com.jetsonfuzz.java.main.Util;
 import java.awt.Color;
+import java.util.ArrayList;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -59,7 +61,7 @@ public class Launcher extends JFrame {
         linkFactTable = new com.jetsonfuzz.java.gui.common.JLinkButton();
         linkDimensional = new com.jetsonfuzz.java.gui.common.JLinkButton();
         linkReview = new com.jetsonfuzz.java.gui.common.JLinkButton();
-        linkReview1 = new com.jetsonfuzz.java.gui.common.JLinkButton();
+        linkExecute = new com.jetsonfuzz.java.gui.common.JLinkButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -120,12 +122,12 @@ public class Launcher extends JFrame {
             }
         });
 
-        linkReview1.setText("6.  Execute operations");
-        linkReview1.setFocusable(false);
-        linkReview1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        linkReview1.addActionListener(new java.awt.event.ActionListener() {
+        linkExecute.setText("6.  Execute operations");
+        linkExecute.setFocusable(false);
+        linkExecute.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        linkExecute.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                linkReview1ActionPerformed(evt);
+                linkExecuteActionPerformed(evt);
             }
         });
 
@@ -146,7 +148,7 @@ public class Launcher extends JFrame {
                             .addComponent(linkFactTable, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(linkDimensional, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(linkReview, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(linkReview1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(linkExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(linkConnect, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 82, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -167,7 +169,7 @@ public class Launcher extends JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(linkReview, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(linkReview1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(linkExecute, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(btnQuit)
                 .addContainerGap())
@@ -186,12 +188,11 @@ public class Launcher extends JFrame {
         
         JDialog dialog = pane.createDialog(null, "Connect to Database");
         
+        // Show the dialog
         dialog.setVisible(true);
       
         // Handle the OK/Cancel buttons
-        if(pane.getValue() == null) {
-            // User canceled, do nothing
-        } else {
+        if(pane.getValue() != null) {
             // User clicked OK, Force a save on the settings
             conPanel.saveSettings();
                     
@@ -219,61 +220,74 @@ public class Launcher extends JFrame {
         
         JDialog dialog = pane.createDialog(null, "Select Dimensional Tables");
         
+        // Show the dialog
         dialog.setVisible(true);
       
-        if(pane.getValue() == null) {
-            // User canceled
-        } else {
-            // User clicked OK, do something
-            
+        // Handle the OK/Cancel button
+        if(pane.getValue() != null) {
+            // User clicked OK
+            //
             // At this poine we want to save all the selected or created
             // dimension tables to the NewTables member of the Warehouse
             // object.  We also want to set the NewName of the tables
             // with a prefix of "DIM_" so that we can distinguish them
             // from existing tables
-            this._dw.setNewTables(selectPanel.saveTables());
-            for (SqlTable table : this._dw.getNewTables()) {
+            ArrayList<SqlTable> tables = selectPanel.saveTables();
+            
+            // We need to go through and make sure any custom tables
+            // have the prefixed name as well as those that were copied
+            // directly from the original transactional tables
+            for (SqlTable table : tables) {
                 if (! table.isCustomTable()) {
-                    table.setNewName("DIM_" + table.getOriginalName());
+                    table.setNewName(Constants.NewTablePrefix + table.getOriginalName());
                     table.setDimensionalTable(true);
                 }
             }
+
+            this._dw.getNewTables().addAll(tables);
         }
     }//GEN-LAST:event_linkDimensionalActionPerformed
 
     private void linkFactTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkFactTableActionPerformed
         FactTablePanel factPanel = new FactTablePanel(this._props, this._db, this._dw);
+        
         JOptionPane pane = new JOptionPane(factPanel,  
                 JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        
         JDialog dialog = pane.createDialog(null, "Setup Fact Table");
+        
+        // Show the dialog
         dialog.setVisible(true);
       
-        if(pane.getValue() == null) {
-            // User canceled
-        } else {
+        // Handle the OK/Cancel button
+        if(pane.getValue() != null) {
             // User clicked OK
+            this._dw.getFactTables().add(factPanel.saveTableDetails());
         }
     }//GEN-LAST:event_linkFactTableActionPerformed
 
     private void linkReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkReviewActionPerformed
         ReviewPanel reviewPanel = new ReviewPanel(this._props, this._db, this._dw);
+        
         JOptionPane pane = new JOptionPane(reviewPanel,  
                 JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        
         JDialog dialog = pane.createDialog(null, "Review Operations");
+        
+        // Show the dialog
         dialog.setVisible(true);
       
-        if(pane.getValue() == null) {
-            // User canceled
-        } else {
+        // Handle the OK/Cancel button
+        if(pane.getValue() != null) {
             // User clicked OK
         }
     }//GEN-LAST:event_linkReviewActionPerformed
 
-    private void linkReview1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkReview1ActionPerformed
+    private void linkExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkExecuteActionPerformed
         // Here is where we are going to do all the work
         // all of the other operations must be complete before we
         // can proceed.
-    }//GEN-LAST:event_linkReview1ActionPerformed
+    }//GEN-LAST:event_linkExecuteActionPerformed
 
     private void btnQuitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitActionPerformed
         this.dispose();
@@ -281,13 +295,17 @@ public class Launcher extends JFrame {
 
     private void linkInitializeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_linkInitializeActionPerformed
         InitializePanel initPanel = new InitializePanel();
-        JOptionPane pane = new JOptionPane(initPanel,  JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        
+        JOptionPane pane = new JOptionPane(initPanel,  
+                JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
+        
         JDialog dialog = pane.createDialog(null, "Initialize Transaction Data");
+        
+        // Show the dialog
         dialog.setVisible(true);
       
-        if(pane.getValue() == null) {
-            // User canceled
-        } else {
+        // Handle the OK/Cancel buttons
+        if(pane.getValue() != null) {
             // User clicked OK
             String sql = initPanel.getSQL();
             
@@ -346,9 +364,9 @@ public class Launcher extends JFrame {
     private javax.swing.JLabel jLabel1;
     private com.jetsonfuzz.java.gui.common.JLinkButton linkConnect;
     private com.jetsonfuzz.java.gui.common.JLinkButton linkDimensional;
+    private com.jetsonfuzz.java.gui.common.JLinkButton linkExecute;
     private com.jetsonfuzz.java.gui.common.JLinkButton linkFactTable;
     private com.jetsonfuzz.java.gui.common.JLinkButton linkInitialize;
     private com.jetsonfuzz.java.gui.common.JLinkButton linkReview;
-    private com.jetsonfuzz.java.gui.common.JLinkButton linkReview1;
     // End of variables declaration//GEN-END:variables
 }

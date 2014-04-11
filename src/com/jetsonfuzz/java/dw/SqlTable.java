@@ -119,10 +119,6 @@ public class SqlTable {
     
     @Override
     public String toString() {
-        if (this._isDimensionTable) {
-            return this._newName;
-        } else {
-            return this._originalName;
-        }
+        return this._newName;
     }
 }

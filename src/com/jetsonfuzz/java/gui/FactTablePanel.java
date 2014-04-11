@@ -123,10 +123,7 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.listKeys.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-//                if (! e.isTemporary()) {
-//                    JList list = (JList) e.getSource();
-//                    list.clearSelection();
-//                }
+                // Not implemented
             }
 
             @Override
@@ -162,10 +159,7 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.listNonKeys.addFocusListener(new FocusListener() {
             @Override
             public void focusLost(FocusEvent e) {
-//                if (! e.isTemporary()) {
-//                    JList list = (JList) e.getSource();
-//                    list.clearSelection();
-//                }
+                // Not implemented
             }
 
             @Override
@@ -634,15 +628,15 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.listNonKeys.updateUI();
     }//GEN-LAST:event_btnRemoveAttrActionPerformed
 
-    private SqlTable saveTableDetails() {
+    public SqlTable saveTableDetails() {
         SqlTable newTable = new SqlTable();
-
+        ArrayList<SqlColumn> cols = new ArrayList<>();
+        
         newTable.setOriginalName(this.txtFactName.getText());
         newTable.setNewName(Constants.FactTablePrefix + this.txtFactName.getText());
         newTable.setCustomTable(true);
         
         // Key attributes
-        ArrayList<SqlColumn> cols = new ArrayList<>();
         for (Object obj : this._keyModel.toArray()) {
             SqlColumn col = (SqlColumn) obj;
             cols.add(col);

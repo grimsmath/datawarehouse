@@ -49,18 +49,22 @@ public class SelectTablePanel extends javax.swing.JPanel {
     }
 
     private void load() {
+        this._modelSource.clear();
+        
         for(SqlTable table : this._dw.getOriginalTables()) {
             this._modelSource.addElement(table);
         }
 
-        this.listSource.setModel(this._modelSource);
+        this.listSource.updateUI();
     }
     
     public ArrayList<SqlTable> saveTables() {
         ArrayList<SqlTable> tables = new ArrayList<>();
         
-        for (int i = 0; i < this._modelDest.getSize(); i++) {
-            tables.add(this._modelDest.getElementAt(i));
+        for (Object obj : this._modelDest.toArray()) {
+            if (obj instanceof SqlTable) {
+                tables.add((SqlTable) obj);
+            }
         }
         
         return tables;
@@ -239,8 +243,10 @@ public class SelectTablePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddTableActionPerformed
 
     private void btnAddAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllActionPerformed
-        for (int i = 0; i < this._modelSource.getSize(); i++) {
-            this._modelDest.addElement(this._modelSource.getElementAt(i));
+        for (Object obj : this._modelSource.toArray()) {
+            if (obj instanceof SqlTable) {
+                this._modelDest.addElement((SqlTable) obj);
+            }
         }
         
         // Remove the items from the source
@@ -268,17 +274,21 @@ public class SelectTablePanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRemoveTableActionPerformed
 
     private void btnRemoveAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveAllActionPerformed
-        for (int i = 0; i < this._modelDest.getSize(); i++) {
-            SqlTable table = (SqlTable) this._modelDest.getElementAt(i);
-            if (! table.isCustomTable()) {
-                this._modelSource.addElement(this._modelDest.getElementAt(i));
+        for (Object obj : this._modelDest.toArray()) {
+            if (obj instanceof SqlTable) {
+                SqlTable table = (SqlTable) obj;
+                if (! table.isCustomTable()) {
+                    this._modelSource.addElement(table);
+                }
             }
         }
         
         for (Object obj : this._modelDest.toArray()) {
-            SqlTable table = (SqlTable) obj;
-            if (! table.isCustomTable()) {
-                this._modelDest.removeElement(obj);
+            if (obj instanceof SqlTable) {
+                SqlTable table = (SqlTable) obj;
+                if (! table.isCustomTable()) {
+                    this._modelDest.removeElement(obj);
+                }
             }
         }
         
@@ -294,6 +304,8 @@ public class SelectTablePanel extends javax.swing.JPanel {
                 JOptionPane.OK_CANCEL_OPTION);
         
         JDialog dialog = pane.createDialog(null, "Define Dimension Table");
+        
+        // Show the dialog
         dialog.setVisible(true);
       
         // Handle the OK/Cancel buttons

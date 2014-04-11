@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author dking
  */
-public class Warehouse {
+public final class Warehouse {
     private Properties _props = null;
     private Database _db = null;
     private ArrayList<SqlTable> _originalTables = null;
@@ -36,7 +36,8 @@ public class Warehouse {
     }
     
     public void setOriginalTables(ArrayList<SqlTable> originalTables) {
-        this._originalTables = originalTables;
+        this._originalTables.clear();
+        this._originalTables.addAll(originalTables);
     }
     
     public ArrayList<SqlTable> getNewTables() {
@@ -44,7 +45,8 @@ public class Warehouse {
     }
     
     public void setNewTables(ArrayList<SqlTable> newTables) {
-        this._newTables = newTables;
+        this._newTables.clear();
+        this._newTables.addAll(newTables);
     }
     
     public ArrayList<SqlTable> getFactTables() {
@@ -52,7 +54,8 @@ public class Warehouse {
     }
     
     public void setFactTables(ArrayList<SqlTable> factTables) {
-        this._factTables = factTables;
+        this._factTables.clear();
+        this._factTables.addAll(factTables);
     }
     
     public void loadSchema() {

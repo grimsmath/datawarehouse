@@ -38,7 +38,7 @@
                           <Component id="linkFactTable" alignment="0" min="-2" pref="401" max="-2" attributes="0"/>
                           <Component id="linkDimensional" alignment="0" min="-2" pref="401" max="-2" attributes="0"/>
                           <Component id="linkReview" alignment="0" min="-2" pref="401" max="-2" attributes="0"/>
-                          <Component id="linkReview1" alignment="0" min="-2" pref="401" max="-2" attributes="0"/>
+                          <Component id="linkExecute" alignment="0" min="-2" pref="401" max="-2" attributes="0"/>
                           <Component id="linkConnect" alignment="0" min="-2" pref="401" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="0" pref="82" max="32767" attributes="0"/>
@@ -64,7 +64,7 @@
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="linkReview" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="linkReview1" min="-2" max="-2" attributes="0"/>
+              <Component id="linkExecute" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="28" max="32767" attributes="0"/>
               <Component id="btnQuit" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -140,14 +140,14 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkReviewActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.jetsonfuzz.java.gui.common.JLinkButton" name="linkReview1">
+    <Component class="com.jetsonfuzz.java.gui.common.JLinkButton" name="linkExecute">
       <Properties>
         <Property name="text" type="java.lang.String" value="6.  Execute operations"/>
         <Property name="focusable" type="boolean" value="false"/>
         <Property name="horizontalAlignment" type="int" value="2"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkReview1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="linkExecuteActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>
