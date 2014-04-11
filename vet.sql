@@ -37,6 +37,20 @@ CONSTRAINT fk_patient_guardianid FOREIGN KEY (guardian_id)
 REFERENCES guardian (guardian_id)
 );		
 
+
+CREATE TABLE branch
+(
+clinic_id NUMBER(2),
+clinic_name VARCHAR2(50),
+address VARCHAR2(50),
+city VARCHAR2(30),
+stateAbbr CHAR(2),
+zip NUMBER(5),
+phone VARCHAR2(10),
+PRIMARY KEY (clinic_id)
+);
+
+
 CREATE TABLE doctor		
 (
 vet_id	NUMBER(5),
@@ -52,17 +66,6 @@ PRIMARY KEY (vet_id)
 );
 
 
-CREATE TABLE branch	
-(	
-clinic_id NUMBER(1),
-clinic_name	VARCHAR2(40),
-address	VARCHAR2(45),
-city VARCHAR2(30),		
-stateAbbr CHAR(2),
-zip NUMBER(5),	
-phone VARCHAR2(10),
-PRIMARY KEY (clinic_id)
-);
 
 
 CREATE TABLE employee
@@ -76,6 +79,7 @@ stateAbbr CHAR(2),
 zip NUMBER(5),	
 phone	VARCHAR2(10),
 position	VARCHAR2(10),
+start_date DATE,
 clinic_id	NUMBER(1),
 PRIMARY KEY (emp_id),
 CONSTRAINT fk_employee_clinicid FOREIGN KEY (clinic_id)
@@ -132,12 +136,21 @@ CREATE TABLE visit_prescription
 (
 script_id NUMBER(9),
 visit_id NUMBER(9),
+vet_id NUMBER(5),
 PRIMARY KEY (script_id, visit_id),
 CONSTRAINT fk_visproc_scriptid FOREIGN KEY (script_id)
 REFERENCES prescription (script_id),
 CONSTRAINT fk_visproc_visitid FOREIGN KEY (visit_id)
-REFERENCES visit (visit_id)
+REFERENCES visit (visit_id),
+CONSTRAINT fk_visproc_vetid FOREIGN KEY (vet_id)
+REFERENCES doctor (vet_id)
 );
+
+
+
+
+
+
 
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (100,'Doris','Hardy','P.O. Box 371, 1409 Nisl. Road','Henderson','NV','23865','0818079242','cats');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (101,'Hadley','Vasquez','5700 Convallis Av.','Lakewood','CO','79238','2542384089','dogs');
@@ -148,7 +161,7 @@ INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialt
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (106,'Tasha','Cruz','Ap #857-7815 Libero Avenue','Missoula','MT','73500','9554794593','cats');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (107,'Andrew','Hawkins','2766 Magna. Street','Springdale','AR','72288','9997566733','dogs');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (108,'Rhea','Pace','264-7209 Et, Road','Jackson','MS','52627','7967394518','dogs');
-INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (109,'Cora','Battle','Ap #494-6017 Amet St.','Green Bay','WI','90820','3341777628','dogs');
+INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (109,'Zachary','Rufus','Ap #494-6017 Amet St.','Green Bay','WI','90820','3341777628','small rodents');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (110,'Griffith','Jackson','Ap #354-7653 Placerat. Av.','Hartford','CT','87303','5908394569','exotic');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (111,'Lars','Nash','P.O. Box 281, 490 Proin Street','Pittsburgh','PA','71618','0952330418','dogs');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (112,'Emerson','Lindsay','2705 Quam, Road','Fayetteville','AR','72480','0614114470','farm');
@@ -231,7 +244,7 @@ INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,descr
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2016,'Nissim',1029,'exotic','snake','M',24,'likes to play with lizards');
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2017,'Eden',1006,'dogs','chocolate lab','F',15,'very playful');
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2018,'Hilda',1032,'cats','domestic','F',14,'declawed');
-
+INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2019,'Mr. Hopper',1031,'exotic','bunny','M',2,'Eats carrots');
 
 INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALUES (1,'Caring Paws','Ap #904-122 Aliquam Rd.','Lawton','OK','20397','1684280617');
 INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALUES (2,'Tails and Hearts','Ap #803-9111 Etiam Rd.','Augusta','GA','47401','5358924088');
@@ -241,30 +254,29 @@ INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALU
 INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALUES (6,'Fluffy and Fido Veterinary Clinic','2892 Et, Rd.','West Valley City','UT','38792','7474338752');
 
 
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3000,'Emmanuel','Shepherd','118-4048 Libero. Avenue','Kansas City','KS','99317','7197750635',1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3001,'Lillith','Schwartz','P.O. Box 236, 139 Fames Rd.','Omaha','NE','72042','9449885960',1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3002,'Walker','Vaughan','966-6050 Praesent St.','Tacoma','WA','99095','2362774337',1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3003,'Reagan','Whitfield','3954 Pellentesque Avenue','Jefferson City','MO','40495','2538533895',1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3004,'Carla','Joseph','P.O. Box 476, 8121 Vulputate Street','Evansville','IN','17879','4507936117',2);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3005,'Neville','Atkinson','P.O. Box 243, 1551 Lacinia Street','Chattanooga','TN','17049','1541919134',2);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3006,'Althea','Ramos','230-3092 Donec St.','Eugene','OR','26672','5728659067',2);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3007,'Anne','Lopez','Ap #937-2615 Ridiculus Ave','Bloomington','MN','86196','6794749477',1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3008,'Travis','Fuentes','Ap #559-2399 Euismod Rd.','Norman','OK','76690','7520705867',3);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3009,'Jana','Daniel','P.O. Box 563, 3788 Ipsum. Road','Clarksville','TN','34040','3967676199',2);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3010,'Alexa','Farley','P.O. Box 558, 9752 Egestas Street','Newark','DE','90800','8969622243', 4);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3011,'Peter','Reynolds','821-5899 Metus. Rd.','Indianapolis','IN','71336','6159200702', 3);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3012,'Clark','Anderson','Ap #533-2346 Montes, Street','Los Angeles','CA','91158','1702402052', 4);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3013,'Tana','Haynes','Ap #972-2077 Tincidunt Rd.','Little Rock','AR','72913','7221130437', 5);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3014,'Coby','Robinson','P.O. Box 278, 2180 Etiam Avenue','Jackson','MS','12413','2158867380',6);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3015,'Herrod','Reed','P.O. Box 550, 5015 Amet Ave','Fayetteville','AR','71578','1057487723',5);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3016,'Denton','Richards','928-8702 Ultrices, Rd.','Augusta','GA','92077','1379857561', 3);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3017,'Benedict','Garrison','Ap #203-8190 Sapien Ave','Ketchikan','AK','99797','2655871104', 6);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3018,'Amity','Riggs','P.O. Box 803, 5521 Amet, Road','Gresham','OR','48782','7923884716',1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3019,'Knox','Gonzalez','8510 Fames Road','Bear','DE','80184','4408755754', 1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3020,'Laurel','Marsh','P.O. Box 439, 9872 Duis Rd.','Tulsa','OK','85759','8573954371',5);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3021,'Steel','Mcleod','Ap #658-7013 Blandit Street','Lexington','KY','16228','5128464498',2);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3022,'Ann','Fuentes','Ap #680-7338 Ultrices. Rd.','Wichita','KS','57493','9041664354', 1);
-INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,clinic_id) VALUES (3023,'Dara','Finch','5395 Nulla Road','Bridgeport','CT','19618','9693385631', 2);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3000,'Emmanuel','Shepherd','118-4048 Libero. Avenue','Kansas City','KS','99317','7197750635','01-NOV-12',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3001,'Lillith','Schwartz','P.O. Box 236, 139 Fames Rd.','Omaha','NE','72042','9449885960','13-AUG-11',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3002,'Walker','Vaughan','966-6050 Praesent St.','Tacoma','WA','99095','2362774337','21-SEP-11',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3003,'Reagan','Whitfield','3954 Pellentesque Avenue','Jefferson City','MO','40495','2538533895','05-OCT-11',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3004,'Carla','Joseph','P.O. Box 476, 8121 Vulputate Street','Evansville','IN','17879','4507936117','29-JUL-11',2);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3005,'Neville','Atkinson','P.O. Box 243, 1551 Lacinia Street','Chattanooga','TN','17049','1541919134','06-JUN-11',2);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3006,'Althea','Ramos','230-3092 Donec St.','Eugene','OR','26672','5728659067','05-MAR-10',2);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3007,'Anne','Lopez','Ap #937-2615 Ridiculus Ave','Bloomington','MN','86196','6794749477','05-MAR-09',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3008,'Travis','Fuentes','Ap #559-2399 Euismod Rd.','Norman','OK','76690','7520705867','15-MAY-09',3);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3009,'Jana','Daniel','P.O. Box 563, 3788 Ipsum. Road','Clarksville','TN','34040','3967676199','05-NOV-09',2);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3010,'Alexa','Farley','P.O. Box 558, 9752 Egestas Street','Newark','DE','90800','8969622243', '14-JAN-12',4);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3011,'Peter','Reynolds','821-5899 Metus. Rd.','Indianapolis','IN','71336','6159200702', '14-FEB-11',3);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3012,'Clark','Anderson','Ap #533-2346 Montes, Street','Los Angeles','CA','91158','1702402052', '05-APR-10',4);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3013,'Tana','Haynes','Ap #972-2077 Tincidunt Rd.','Little Rock','AR','72913','7221130437', '05-DEC-12',6);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3015,'Herrod','Reed','P.O. Box 550, 5015 Amet Ave','Fayetteville','AR','71578','1057487723','08-DEC-11',5);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3016,'Denton','Richards','928-8702 Ultrices, Rd.','Augusta','GA','92077','1379857561', '05-JAN-11',3);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3017,'Benedict','Garrison','Ap #203-8190 Sapien Ave','Ketchikan','AK','99797','2655871104', '03-JAN-11',6);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3018,'Amity','Riggs','P.O. Box 803, 5521 Amet, Road','Gresham','OR','48782','7923884716','18-FEB-11',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3019,'Knox','Gonzalez','8510 Fames Road','Bear','DE','80184','4408755754', '05-MAR-10',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3020,'Laurel','Marsh','P.O. Box 439, 9872 Duis Rd.','Tulsa','OK','85759','8573954371','09-NOV-11',5);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3021,'Steel','Mcleod','Ap #658-7013 Blandit Street','Lexington','KY','16228','5128464498','16-NOV-11',2);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3022,'Ann','Fuentes','Ap #680-7338 Ultrices. Rd.','Wichita','KS','57493','9041664354', '07-NOV-11',1);
+INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3023,'Dara','Finch','5395 Nulla Road','Bridgeport','CT','19618','9693385631', '05-NOV-09',2);
 
 
 INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (501, 'spay/neuter', 'y', 'y', 79.99);
@@ -275,6 +287,8 @@ INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALI
 INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (506, 'trim nails', 'n', 'n', 19.99);
 INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (507, 'heartworm', 'n', 'n', 49.99);
 INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (508, 'surgery', 'y', 'y', 129.99);
+INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (509, 'bath', 'n', 'n', 9.99);
+
 
 
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100100, 2000, '25-APR-13', 1);
@@ -284,50 +298,51 @@ INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100160, 2001
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100200, 2000, '20-MAY-13', 1);
 
 
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10100,2011,'29-OCT-13',6);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10101,2012,'05-OCT-14',6);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10102,2000,'09-OCT-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10103,2008,'15-FEB-14',6);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10104,2012,'17-NOV-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10105,2010,'08-NOV-13',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10106,2001,'02-APR-14',4);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10107,2012,'19-MAY-13',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10108,2009,'22-APR-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10100,2011,'29-JUL-13',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10101,2012,'29-JUL-13',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10102,2000,'29-JUL-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10103,2008,'29-JUL-13',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10104,2012,'29-JUL-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10105,2010,'29-JUL-13',5);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10106,2001,'29-JUL-13',4);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10107,2012,'02-AUG-13',5);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10108,2009,'02-AUG-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10147,2019,'02-AUG-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10230,2019,'02-AUG-13',1);
 
 
-
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10109,2011,'13-MAR-15',4);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10110,2007,'18-SEP-13',4);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10111,2009,'20-JUN-13',2);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10112,2000,'30-MAR-14',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10113,2011,'24-APR-13',3);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10114,2008,'18-JAN-15',2);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10115,2011,'15-MAY-13',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10116,2018,'08-SEP-14',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10117,2015,'07-JAN-14',3);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10118,2011,'19-FEB-15',6);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10119,2014,'21-OCT-14',6);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10120,2018,'16-NOV-14',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10121,2005,'07-FEB-14',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10109,2011,'02-AUG-13',4);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10110,2007,'02-AUG-13',4);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10111,2009,'02-AUG-13',2);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10112,2000,'02-AUG-13',5);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10113,2011,'02-AUG-13',3);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10114,2008,'02-AUG-13',2);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10115,2011,'02-AUG-13',5);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10116,2018,'02-AUG-13',5);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10117,2015,'02-AUG-13',3);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10118,2011,'02-AUG-13',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10119,2014,'02-AUG-13',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10120,2018,'03-AUG-13',5);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10121,2005,'03-AUG-13',6);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10122,2003,'15-AUG-13',5);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10123,2006,'17-JAN-15',3);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10124,2000,'03-NOV-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10125,2005,'09-OCT-14',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10126,2008,'21-MAR-14',4);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10127,2007,'01-OCT-14',2);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10128,2011,'25-JAN-14',2);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10129,2007,'27-SEP-14',2);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10130,2011,'03-NOV-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10131,2008,'14-OCT-14',4);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10132,2013,'25-SEP-14',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10133,2014,'01-SEP-14',6);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10134,2009,'18-APR-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10135,2007,'10-SEP-13',3);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10136,2004,'13-FEB-14',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10137,2010,'25-NOV-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10138,2002,'26-AUG-13',1);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10139,2002,'03-APR-14',4);
-INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10140,2009,'29-JUL-14',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10123,2006,'15-AUG-13',3);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10124,2000,'15-AUG-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10125,2005,'15-AUG-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10126,2008,'15-AUG-13',4);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10127,2007,'15-AUG-13',2);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10128,2011,'01-SEP-13',2);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10129,2007,'01-SEP-13',2);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10130,2011,'01-SEP-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10131,2008,'01-SEP-13',4);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10132,2013,'01-SEP-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10133,2014,'01-SEP-13',6);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10134,2009,'01-SEP-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10135,2007,'13-SEP-13',3);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10136,2004,'13-SEP-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10137,2010,'13-SEP-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10138,2002,'13-SEP-13',1);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10139,2002,'13-SEP-13',4);
+INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10140,2009,'13-SEP-13',6);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10141,2008,'05-NOV-14',6);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10142,2006,'19-JUN-14',4);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10143,2005,'07-FEB-15',3);
@@ -335,44 +350,48 @@ INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10144,2017,'27-
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10145,2008,'03-JUL-13',2);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10146,2004,'02-NOV-14',1);
 
-
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10122,503);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10136,503);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10129,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10106,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10111,505);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10113,505);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10120,507);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10105,501);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10103,505);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10127,502);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10118,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10100,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10109,505);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10135,501);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10116,501);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10114,503);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10119,506);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10126,506);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10135,502);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10129,503);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10139,501);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10111,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10111,502);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10138,506);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10112,505);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10107,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10122,502);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10125,501);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10137,508);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10115,507);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10139,502);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10121,505);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10108,504);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10137,507);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10102,502);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10120,506);
-INSERT INTO visit_procedure (visit_id,procedure_id) VALUES (10138,501);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10147,501, 109);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10147,506, 109);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10147,509, 109);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10230,504, 109);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10230,506, 109);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10122,503, 101);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10136,503, 100);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10129,508, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10106,508, 108);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10111,505, 100);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10113,505, 108);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10120,507, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10105,501, 111);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10103,505, 105);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10127,502, 104);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10118,508, 111);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10100,508, 111);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10109,505, 109);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10135,501, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10116,501, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10114,503, 110);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10119,506, 104);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10126,506, 110);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10135,502, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10129,503, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10139,501, 103);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10111,508, 100);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10111,502, 100);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10138,506, 110);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10112,505, 112);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10107,508, 110);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10122,502, 107);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10125,501, 110);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10137,508, 107);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10115,507, 111);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10139,502, 103);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10121,505, 103);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10108,504, 102);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10137,507, 101);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10102,502, 113);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10120,506, 106);
+INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10138,501, 110);
 
 
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (100,'Zetia','take three, four times a day');
@@ -394,13 +413,30 @@ INSERT INTO prescription (script_id,drug_id,comments) VALUES (115,'Zyprexa','tak
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (116,'Amoxicillin','take on empty stomach');
 
 
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (113,10142);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (101,10103);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (108,10119);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (101,10106);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (104,10126);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (103,10130);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (103,10132);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (108,10140);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (114,10143);
-INSERT INTO visit_prescription (script_id,visit_id) VALUES (109,10118);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (113,10100, 111);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (101,10103, 105);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (108,10119, 104);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (101,10106, 108);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (104,10126, 110);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (103,10135, 106);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (103,10122, 107);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (108,10138, 110);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (114,10138, 110);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (100,10136, 107);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (109,10136, 107);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (104,10125, 110);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (115,10230, 109);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (116,10230, 109);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (116,10127, 104);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (112,10127, 104);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (111,10127, 104);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (116,10137, 107);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (110,10137, 107);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (101,10137, 107);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (110,10121, 103);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (108,10121, 103);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (107,10121, 103);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (106,10120, 106);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (116,10120, 106);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (102,10135, 106);
+INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (111,10135, 106);
