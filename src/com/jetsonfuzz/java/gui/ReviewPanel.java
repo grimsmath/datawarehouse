@@ -43,7 +43,7 @@ public class ReviewPanel extends javax.swing.JPanel {
         
         // Show all the create commands
         for (SqlTable table : this._dw.getNewTables()) {
-            text += table.getCreateCommand() + ";\n";
+            text += table.getCreateCommand() + "\n";
             text += "\n";
             if (! table.isCustomTable()) {
                 // Table copy insert
@@ -68,10 +68,46 @@ public class ReviewPanel extends javax.swing.JPanel {
             text += "\n";
         }
         
+        // Generate the FACT table SQL DDL/DML
         for (SqlTable table : this._dw.getFactTables()) {
             text += table.getCreateCommand() + "\n";
+
+            // Insert DML for FACT Table
+//            text += "\n";
+//            
+//            text += "INSERT INTO " + table.getNewName() + " ";
+//            text += "(";
+//            
+//            // Define the column labels
+//            int i = 0;
+//            for (SqlColumn col : table.getColumns()) {
+//                text += "\n\t";
+//                if ((i + 1) < table.getColumns().size()) {
+//                    text += col.getNewName() + ", ";
+//                } else {
+//                    text += col.getNewName();
+//                }
+//                i++;
+//            }
+//            
+//            text += "\n) VALUES (\n";
+//            
+//            // Now for the values for each column
+//            i = 0;
+//            for (SqlColumn col : table.getColumns()) {
+//                String newColName = col.getNewName();
+//                SqlTable origTable = col.getOriginalTable();
+//                
+//                text += "\t(SELECT " + newColName + " FROM " + origTable.getNewName() + ")";
+//                if ((i + 1) < table.getColumns().size()) {
+//                    text += ",\n";
+//                }
+//                i++;
+//            }
+//
+//            text += "\n)";
         }
-        
+                
         // Show all the insert commands
         
         this.txtSQL.setText(text);

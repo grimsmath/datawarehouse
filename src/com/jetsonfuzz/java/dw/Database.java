@@ -177,7 +177,13 @@ public class Database {
                                 
                 // Retrieve the foreign keys
                 table.setForeignKeys(this.getForeignKeys(table));
+
+                // Save a reference to the original table the column came from
+                for (SqlColumn col : table.getColumns()) {
+                    col.setOriginalTable(table);
+                }
                 
+
                 // Save the table for use later
                 tables.add(table);
             }

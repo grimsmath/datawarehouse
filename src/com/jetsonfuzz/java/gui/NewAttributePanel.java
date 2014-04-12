@@ -77,12 +77,27 @@ public class NewAttributePanel extends javax.swing.JPanel {
         boolean bReturn = false;
         
         this._attrName = this.txtAttrName.getText();
-        this._dataType = this.cbxAttrType.getSelectedIndex();
         this._size = (int) this.spinSize.getValue();
         this._precision = (int) this.spinPrecision.getValue();
         this._isNullable = this.cbxNullable.isSelected();
         this._isPrimaryKey = this.cbxPrimaryKey.isSelected();
         this._isAutoIncrement = this.cbxAutoIncrement.isSelected();
+
+        int selectedIndex = this.cbxAttrType.getSelectedIndex();
+        String value = (String) this._dataTypeModel.getElementAt(selectedIndex);
+        
+        Iterator entries = Database.getJdbcTypeName().entrySet().iterator();
+        while (entries.hasNext()) {
+            Entry thisEntry = (Entry) entries.next();
+            String entryValue = (String) thisEntry.getValue();
+            
+            if (entryValue.compareTo(value) == 0) {
+                this._dataType = (int) thisEntry.getKey();
+                break;
+            }
+        }
+                
+        this._dataType = this.cbxAttrType.getSelectedIndex();
         
         return bReturn;
     }

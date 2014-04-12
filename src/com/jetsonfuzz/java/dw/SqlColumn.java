@@ -125,10 +125,6 @@ public class SqlColumn {
             text += " NOT NULL";
         }
         
-//        if (this._isPrimaryKey) {
-//            text += " PRIMARY KEY";
-//        }
-        
         return text;
     }
     
@@ -153,7 +149,7 @@ public class SqlColumn {
             (dataType == java.sql.Types.TIME) ||
             (dataType == java.sql.Types.TIMESTAMP))
         {
-            Util.log("Found a date/time datatype");
+            //
         } else {
             bReturn = true;            
         }
