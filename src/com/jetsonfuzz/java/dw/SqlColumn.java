@@ -109,7 +109,7 @@ public class SqlColumn {
     @Override
     public String toString() {
         String text = this._newName;
-        Map types = Database.getJdbcTypeName(this._dataType);
+        Map types = Database.getJdbcTypeName();
         
         text += " " + types.get(this._dataType);
         
@@ -125,9 +125,9 @@ public class SqlColumn {
             text += " NOT NULL";
         }
         
-        if (this._isPrimaryKey) {
-            text += " PRIMARY KEY";
-        }
+//        if (this._isPrimaryKey) {
+//            text += " PRIMARY KEY";
+//        }
         
         return text;
     }

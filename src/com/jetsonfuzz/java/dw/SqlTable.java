@@ -90,6 +90,8 @@ public class SqlTable {
                 ? this._originalName 
                 : this._newName;
         
+        ArrayList<String> keys = new ArrayList<>();
+        
         // Open the create table command
         text += "CREATE TABLE " + tableName + " (\n";
         
@@ -106,13 +108,30 @@ public class SqlTable {
             } else {
                 text += col.toString();
             }
-
+            
+            if (col.getPrimaryKey()) {
+                keys.add(col.getNewName());
+            }
+            
             // Increment the counter
             i++;
         }
         
+        // Primary Keys
+        i = 0;
+        text += ",\n\tCONSTRAINT PK_" + tableName + " PRIMARY KEY(";
+        for (String key : keys) {
+            if ((i + 1) < keys.size()) {
+                text += key + ", "; 
+            } else {
+                text += key;
+            }
+            i++;
+        }
+        text += ")";
+        
         // Close the create table command
-        text += "\n)";
+        text += "\n);";
         
         return text;        
     }

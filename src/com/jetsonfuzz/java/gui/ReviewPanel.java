@@ -43,12 +43,12 @@ public class ReviewPanel extends javax.swing.JPanel {
         
         // Show all the create commands
         for (SqlTable table : this._dw.getNewTables()) {
-            text += table.getCreateCommand() + "\n";
+            text += table.getCreateCommand() + ";\n";
             text += "\n";
             if (! table.isCustomTable()) {
                 // Table copy insert
-                text += "INSERT INTO " + table.getNewName() + " VALUES (" +
-                        "SELECT * FROM " + table.getOriginalName() + ")\n";
+                text += "INSERT INTO " + table.getNewName() + " (" +
+                        "SELECT * FROM " + table.getOriginalName() + ");\n";
             } else {
                 // Custom table insert
                 text += "INSERT INTO " + table.getNewName() + " (";

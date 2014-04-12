@@ -248,6 +248,7 @@ public class FactTablePanel extends javax.swing.JPanel {
         jScrollPane4 = new javax.swing.JScrollPane();
         listNonKeys = new javax.swing.JList();
         btnRemoveAttr = new javax.swing.JButton();
+        btnAddNewAttribute = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         btnViewSQL = new javax.swing.JButton();
         btnSaveTable = new javax.swing.JButton();
@@ -346,7 +347,7 @@ public class FactTablePanel extends javax.swing.JPanel {
                     .addComponent(cbxAutoIncrement))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cbxNullable)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRevertChanges)
                     .addComponent(btnSaveChanges))
@@ -413,13 +414,13 @@ public class FactTablePanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnAssignKey)
-                .addGap(3, 3, 3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAssignNonKey))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGap(5, 5, 5)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(72, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(75, Short.MAX_VALUE)))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Step 4: Assign Keys"));
@@ -447,9 +448,10 @@ public class FactTablePanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRemoveKey))
+                .addComponent(btnRemoveKey)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Step 5: Non-Key Attributes"));
@@ -463,22 +465,32 @@ public class FactTablePanel extends javax.swing.JPanel {
             }
         });
 
+        btnAddNewAttribute.setText("Add New Attribute");
+        btnAddNewAttribute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddNewAttributeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnRemoveAttr, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(btnRemoveAttr, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE)
+            .addComponent(btnAddNewAttribute, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAddNewAttribute)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRemoveAttr))
         );
 
@@ -548,7 +560,7 @@ public class FactTablePanel extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -628,6 +640,39 @@ public class FactTablePanel extends javax.swing.JPanel {
         this.listNonKeys.updateUI();
     }//GEN-LAST:event_btnRemoveAttrActionPerformed
 
+    private void btnAddNewAttributeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddNewAttributeActionPerformed
+        // Show the view panel
+        NewAttributePanel attrPanel = new NewAttributePanel(this._props, this._db, this._dw);
+        JOptionPane pane = new JOptionPane(attrPanel,  
+                JOptionPane.PLAIN_MESSAGE, 
+                JOptionPane.OK_CANCEL_OPTION);
+
+        JDialog dialog = pane.createDialog(null, "Create New Attribute");
+        dialog.setVisible(true);
+
+        if(pane.getValue() != null) {
+            if ((int) pane.getValue() == JOptionPane.OK_OPTION) {
+                // User clicked OK
+                attrPanel.saveForm();
+
+                // Create a new column object and fill it up
+                SqlColumn newColumn = new SqlColumn();
+
+                // Save the details
+                newColumn.setOriginalName(attrPanel.getAttributeName());
+                newColumn.setNewName(attrPanel.getAttributeName());
+                newColumn.setDataType(attrPanel.getDataType());
+                newColumn.setColumnSize(attrPanel.getAttributeSize());
+                newColumn.setPrecision(attrPanel.getAttributePrecision());
+                newColumn.setAllowNull(attrPanel.getNullable());
+                newColumn.setPrimaryKey(attrPanel.getPrimaryKey());
+
+                // Add the new column to the non-keys
+                this._nonKeyModel.addElement(newColumn);
+            }
+        }
+    }//GEN-LAST:event_btnAddNewAttributeActionPerformed
+
     public SqlTable saveTableDetails() {
         SqlTable newTable = new SqlTable();
         ArrayList<SqlColumn> cols = new ArrayList<>();
@@ -667,6 +712,7 @@ public class FactTablePanel extends javax.swing.JPanel {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAddNewAttribute;
     private javax.swing.JButton btnAssignKey;
     private javax.swing.JButton btnAssignNonKey;
     private javax.swing.JButton btnRemoveAttr;

@@ -300,7 +300,7 @@ public class Database {
         return columns;
     }
 
-    public static Map getJdbcTypeName(int jdbcType) {
+    public static Map getJdbcTypeName() {
         Map map = new HashMap();
 
         // Get all field in java.sql.Types
