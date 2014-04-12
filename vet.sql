@@ -9,6 +9,11 @@ DROP TABLE employee;
 DROP TABLE branch;
 DROP TABLE prescription;
 
+DROP TABLE pet_foods;
+DROP TABLE clinic_store;
+DROP TABLE timetable;
+
+
 CREATE TABLE guardian
 (			
 guardian_id	NUMBER(5),
@@ -440,3 +445,58 @@ INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (106,10120, 1
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (116,10120, 106);
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (102,10135, 106);
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (111,10135, 106);
+
+
+create table clinic_store
+(
+item_id NUMBER(4),
+item_name VARCHAR2(30),
+description VARCHAR2(50),
+PRIMARY KEY (item_id)
+);
+
+
+INSERT INTO clinic_store (item_id, item_name, description) VALUES (1,'Doggie Bone','rawhide dog bone');
+INSERT INTO clinic_store (item_id, item_name, description) VALUES (2,'CCC Spray','carpet cleaning spray');
+INSERT INTO clinic_store (item_id, item_name, description) VALUES (3,'Crazy Cats','cat toy');
+INSERT INTO clinic_store (item_id, item_name, description) VALUES (4,'Sneeze BGone','anti-allergen spray');
+
+
+create table pet_foods
+(
+food_id NUMBER(4),
+food_name VARCHAR2(30),
+species VARCHAR2(20),
+designation VARCHAR2(50),
+PRIMARY KEY (food_id)
+);
+
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1000,'Xtra Health','dogs', 'for older dogs');
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2000,'Diet Cat Food','cats', 'for fat cats');
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (4000,'Krunchy Treats','rabbits', 'rabbit pellets');
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (4010,'Farm Hay','farm', 'hay for farm animals');
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1010,'Growing Strong','dogs', 'for puppies');
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1020,'Joint Health','dogs', 'for older dogs');
+INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2001,'Kitten Food','cats', 'for kittens');
+
+
+create table timetable
+(
+time_id NUMBER(9),
+day NUMBER (2),
+month NUMBER (2),
+year NUMBER(4),
+appt_time VARCHAR2(20),
+PRIMARY KEY (time_id)
+);
+
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200100, 1, 1, 2013, '2:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200101, 1, 1, 2013, '3:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200102, 1, 1, 2013, '4:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200103, 1, 1, 2013, '5:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200200, 2, 1, 2013, '8:30 AM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200201, 2, 1, 2013, '9:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200202, 2, 1, 2013, '10:30 AM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200203, 2, 1, 2013, '11:30 AM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200204, 2, 1, 2013, '12:30 PM');
+
