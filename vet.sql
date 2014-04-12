@@ -1,7 +1,7 @@
 DROP TABLE visit_procedure;
 DROP TABLE visit_prescription;
 DROP TABLE visit;
-DROP TABLE procedures;
+DROP TABLE med_procedure;
 DROP TABLE patient;
 DROP TABLE guardian;
 DROP TABLE doctor;
@@ -92,7 +92,7 @@ REFERENCES branch (clinic_id)
 );
 
 
-CREATE TABLE procedures 
+CREATE TABLE med_procedure 
 (
 procedure_id NUMBER(5),
 procedure_name VARCHAR2(20),
@@ -124,7 +124,7 @@ PRIMARY KEY (visit_id, procedure_id),
 CONSTRAINT fk_vp_visitid FOREIGN KEY (visit_id)
 REFERENCES visit (visit_id),
 CONSTRAINT fk_vp_procedureid FOREIGN KEY (procedure_id)
-REFERENCES procedures (procedure_id),
+REFERENCES med_procedure (procedure_id),
 CONSTRAINT fk_vp_vetid FOREIGN KEY (vet_id)
 REFERENCES doctor (vet_id)
 );
@@ -284,15 +284,15 @@ INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_
 INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3023,'Dara','Finch','5395 Nulla Road','Bridgeport','CT','19618','9693385631', '05-NOV-09',2);
 
 
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (501, 'spay/neuter', 'y', 'y', 79.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (502, 'broken bone', 'y', 'n', 39.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (503, 'tooth extraction', 'y', 'n', 29.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (504, 'checkup', 'n', 'n', 49.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (505, 'flea bath', 'n', 'n', 29.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (506, 'trim nails', 'n', 'n', 19.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (507, 'heartworm', 'n', 'n', 49.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (508, 'surgery', 'y', 'y', 129.99);
-INSERT INTO PROCEDURES (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (509, 'bath', 'n', 'n', 9.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (501, 'spay/neuter', 'y', 'y', 79.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (502, 'broken bone', 'y', 'n', 39.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (503, 'tooth extraction', 'y', 'n', 29.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (504, 'checkup', 'n', 'n', 49.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (505, 'flea bath', 'n', 'n', 29.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (506, 'trim nails', 'n', 'n', 19.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (507, 'heartworm', 'n', 'n', 49.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (508, 'surgery', 'y', 'y', 129.99);
+INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (509, 'bath', 'n', 'n', 9.99);
 
 
 
@@ -482,7 +482,7 @@ INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2001,'K
 
 create table timetable
 (
-time_id NUMBER(9),
+time_id NUMBER(13),
 day NUMBER (2),
 month NUMBER (2),
 year NUMBER(4),
@@ -499,4 +499,29 @@ INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200201, 2, 
 INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200202, 2, 1, 2013, '10:30 AM');
 INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200203, 2, 1, 2013, '11:30 AM');
 INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200204, 2, 1, 2013, '12:30 PM');
+
+
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020801, 2, 8, 2013, '3:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020802, 2, 8, 2013, '4:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020803, 2, 8, 2013, '5:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020804, 2, 8, 2013, '6:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020800, 2, 8, 2013, '2:30 PM');
+
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150801, 15, 8, 2013, '1:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150802, 15, 8, 2013, '2:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150803, 15, 8, 2013, '3:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150804, 15, 8, 2013, '4:30 PM');
+
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010900, 1, 9, 2013, '1:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010901, 1, 9, 2013, '2:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010902, 1, 9, 2013, '3:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010903, 1, 9, 2013, '4:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010904, 1, 9, 2013, '5:30 PM');
+
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130900, 13, 9, 2013, '1:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130901, 13, 9, 2013, '2:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130902, 13, 9, 2013, '3:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130903, 13, 9, 2013, '4:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130904, 13, 9, 2013, '5:30 PM');
+INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130905, 13, 9, 2013, '6:30 PM');
 
