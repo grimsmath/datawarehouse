@@ -232,14 +232,22 @@ public class SelectTablePanel extends javax.swing.JPanel {
     private void btnAddTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTableActionPerformed
         // Get the selected tables from the source list
         int[] selectedIndices = this.listSource.getSelectedIndices();
+        ArrayList<Object> selectedObjs = new ArrayList<>();
         
+        // Add elements into the destination list
         for (int id : selectedIndices) {
             this._modelDest.addElement(this._modelSource.getElementAt(id));
-            this._modelSource.removeElementAt(id);
+            selectedObjs.add(this._modelSource.getElementAt(id));
         }
         
-        this.listSource.updateUI();
         this.listSelected.updateUI();
+
+        // Remove element from the source list
+        for (Object obj : selectedObjs) {
+            this._modelSource.removeElement(obj);
+        }
+                
+        this.listSource.updateUI();
     }//GEN-LAST:event_btnAddTableActionPerformed
 
     private void btnAddAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddAllActionPerformed
@@ -259,14 +267,20 @@ public class SelectTablePanel extends javax.swing.JPanel {
 
     private void btnRemoveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveTableActionPerformed
         int[] selectedIndices = this.listSelected.getSelectedIndices();
+        ArrayList<Object> selectedObjs = new ArrayList<>();
         
         for (int id : selectedIndices) {
-            SqlTable table = (SqlTable) this._modelDest.getElementAt(id);
+            Object obj = this._modelDest.getElementAt(id);
+            SqlTable table = (SqlTable) obj;
             
             if (! table.isCustomTable()) {
                 this._modelSource.addElement(this._modelDest.getElementAt(id));
-                this._modelDest.removeElementAt(id);
+                selectedObjs.add(obj);
             }
+        }
+        
+        for (Object obj : selectedObjs) {
+            this._modelDest.removeElement(obj);
         }
         
         this.listSelected.updateUI();

@@ -9,14 +9,11 @@ package com.jetsonfuzz.java.gui;
 import com.jetsonfuzz.java.dw.Database;
 import com.jetsonfuzz.java.dw.Warehouse;
 import com.jetsonfuzz.java.main.Properties;
-import com.jetsonfuzz.java.main.Util;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
 /**
@@ -96,8 +93,6 @@ public class NewAttributePanel extends javax.swing.JPanel {
                 break;
             }
         }
-                
-        this._dataType = this.cbxAttrType.getSelectedIndex();
         
         return bReturn;
     }

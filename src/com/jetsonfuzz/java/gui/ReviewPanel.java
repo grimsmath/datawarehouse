@@ -20,8 +20,7 @@ public class ReviewPanel extends javax.swing.JPanel {
     private Properties _props = null;
     private Database _db = null;
     private Warehouse _dw = null;
-    
-    
+        
     /**
      * Creates new form ReviewPanel
      * @param props
@@ -55,6 +54,7 @@ public class ReviewPanel extends javax.swing.JPanel {
 
                 // Label the individual columns
                 int i = 0;
+                
                 for (SqlColumn col : table.getColumns()) {
                     if (i++ < table.getColumns().size()) {
                         text += col.getNewName() + ", ";
@@ -65,6 +65,7 @@ public class ReviewPanel extends javax.swing.JPanel {
                 
                 text += ") VALUES ("; 
             }
+            
             text += "\n";
         }
         
@@ -138,12 +139,12 @@ public class ReviewPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 629, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                 .addContainerGap())
