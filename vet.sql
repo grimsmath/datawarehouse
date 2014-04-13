@@ -10,7 +10,7 @@ DROP TABLE employee;
 
 DROP TABLE prescription;
 
-DROP TABLE pet_foods;
+DROP TABLE pet_food;
 
 DROP TABLE store_trans;
 DROP TABLE store_item;
@@ -163,7 +163,7 @@ item_cost NUMBER(5,2),
 PRIMARY KEY (item_id)
 );
 
-create table pet_foods
+create table pet_food
 (
 food_id NUMBER(4),
 food_name VARCHAR2(30),
@@ -504,13 +504,13 @@ INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (9,'S
 INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (10,'Feather toy','cat toy', 2.99);
 
 
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1000,'Xtra Health','dogs', 'for older dogs');
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2000,'Diet Cat Food','cats', 'for fat cats');
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (4000,'Krunchy Treats','rabbits', 'rabbit pellets');
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (4010,'Farm Hay','farm', 'hay for farm animals');
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1010,'Growing Strong','dogs', 'for puppies');
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1020,'Joint Health','dogs', 'for older dogs');
-INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2001,'Kitten Food','cats', 'for kittens');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (1000,'Xtra Health','dogs', 'for older dogs');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (2000,'Diet Cat Food','cats', 'for fat cats');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (4000,'Krunchy Treats','rabbits', 'rabbit pellets');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (4010,'Farm Hay','farm', 'hay for farm animals');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (1010,'Growing Strong','dogs', 'for puppies');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (1020,'Joint Health','dogs', 'for older dogs');
+INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (2001,'Kitten Food','cats', 'for kittens');
 
 
 
