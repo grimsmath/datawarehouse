@@ -12,8 +12,10 @@ DROP TABLE prescription;
 
 DROP TABLE pet_food;
 
+
 DROP TABLE store_trans;
 DROP TABLE store_item;
+
 DROP TABLE branch;
 
 CREATE TABLE guardian
