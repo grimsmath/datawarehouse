@@ -1,3 +1,4 @@
+DROP TABLE guardian_purchase;
 DROP TABLE visit_procedure;
 DROP TABLE visit_prescription;
 DROP TABLE visit;
@@ -6,13 +7,14 @@ DROP TABLE patient;
 DROP TABLE guardian;
 DROP TABLE doctor;
 DROP TABLE employee;
-DROP TABLE branch;
+
 DROP TABLE prescription;
 
 DROP TABLE pet_foods;
-DROP TABLE clinic_store;
-DROP TABLE timetable;
 
+DROP TABLE store_trans;
+DROP TABLE store_item;
+DROP TABLE branch;
 
 CREATE TABLE guardian
 (			
@@ -152,8 +154,49 @@ REFERENCES doctor (vet_id)
 );
 
 
+create table store_item
+(
+item_id NUMBER(4),
+item_name VARCHAR2(30),
+description VARCHAR2(50),
+item_cost NUMBER(5,2),
+PRIMARY KEY (item_id)
+);
 
+create table pet_foods
+(
+food_id NUMBER(4),
+food_name VARCHAR2(30),
+species VARCHAR2(20),
+designation VARCHAR2(50),
+PRIMARY KEY (food_id)
+);
 
+CREATE TABLE store_trans
+(
+trans_id NUMBER(6),
+clinic_id NUMBER(2),
+item_id NUMBER(4),
+quantity NUMBER(3),
+trans_date DATE,
+PRIMARY KEY (trans_id),
+CONSTRAINT fk1 FOREIGN KEY (clinic_id)
+REFERENCES branch (clinic_id),
+CONSTRAINT fk2 FOREIGN KEY (item_id)
+REFERENCES store_item (item_id)
+);
+
+CREATE TABLE guardian_purchase
+(
+purch_id NUMBER(4),
+visit_id NUMBER(9),
+trans_id NUMBER(6),
+PRIMARY KEY (purch_id),
+CONSTRAINT fk_gp_visitid FOREIGN KEY (visit_id)
+REFERENCES visit (visit_id),
+CONSTRAINT fk_gp_transid FOREIGN KEY (trans_id)
+REFERENCES store_trans (trans_id)
+);
 
 
 
@@ -447,29 +490,19 @@ INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (102,10135, 1
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (111,10135, 106);
 
 
-create table clinic_store
-(
-item_id NUMBER(4),
-item_name VARCHAR2(30),
-description VARCHAR2(50),
-PRIMARY KEY (item_id)
-);
 
 
-INSERT INTO clinic_store (item_id, item_name, description) VALUES (1,'Doggie Bone','rawhide dog bone');
-INSERT INTO clinic_store (item_id, item_name, description) VALUES (2,'CCC Spray','carpet cleaning spray');
-INSERT INTO clinic_store (item_id, item_name, description) VALUES (3,'Crazy Cats','cat toy');
-INSERT INTO clinic_store (item_id, item_name, description) VALUES (4,'Sneeze BGone','anti-allergen spray');
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (1,'Doggie Bone','rawhide dog bone', 7.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (2,'CCC Spray','carpet cleaning spray', 12.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (3,'Crazy Cats','cat toy', 3.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (4,'Sneeze BGone','anti-allergen spray', 11.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (5,'Cat Nips','fun treat', 4.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (6,'Turkey Toy','dog toy', 11.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (7,'Cat Bed','bed for cats', 39.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (8,'Cat Tube','anti-allergen spray', 14.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (9,'Softee Squeezee ','dog toy', 11.99);
+INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (10,'Feather toy','cat toy', 2.99);
 
-
-create table pet_foods
-(
-food_id NUMBER(4),
-food_name VARCHAR2(30),
-species VARCHAR2(20),
-designation VARCHAR2(50),
-PRIMARY KEY (food_id)
-);
 
 INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1000,'Xtra Health','dogs', 'for older dogs');
 INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2000,'Diet Cat Food','cats', 'for fat cats');
@@ -480,48 +513,115 @@ INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (1020,'J
 INSERT INTO pet_foods (food_id, food_name, species, designation) VALUES (2001,'Kitten Food','cats', 'for kittens');
 
 
-create table timetable
-(
-time_id NUMBER(13),
-day NUMBER (2),
-month NUMBER (2),
-year NUMBER(4),
-appt_time VARCHAR2(20),
-PRIMARY KEY (time_id)
-);
 
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200100, 1, 1, 2013, '2:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200101, 1, 1, 2013, '3:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200102, 1, 1, 2013, '4:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200103, 1, 1, 2013, '5:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200200, 2, 1, 2013, '8:30 AM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200201, 2, 1, 2013, '9:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200202, 2, 1, 2013, '10:30 AM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200203, 2, 1, 2013, '11:30 AM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (200204, 2, 1, 2013, '12:30 PM');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (1,5,10,1,'18-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (2,2,1,2,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (3,1,1,1,'15-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (4,2,8,4,'23-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (5,6,6,3,'27-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (6,4,2,3,'02-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (7,3,2,2,'19-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (8,2,9,2,'22-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (9,5,1,1,'28-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (10,3,9,2,'04-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (11,5,10,4,'05-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (12,5,8,2,'25-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (13,3,9,3,'26-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (14,1,3,1,'20-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (15,4,7,3,'02-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (16,2,1,1,'03-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (17,6,1,1,'21-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (18,3,4,4,'03-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (19,4,1,2,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (20,6,6,4,'06-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (21,6,7,3,'29-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (22,6,4,2,'01-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (23,6,7,1,'25-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (24,6,1,1,'27-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (25,6,1,1,'04-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (26,3,2,1,'02-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (27,5,9,4,'22-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (28,5,10,3,'25-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (29,1,3,1,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (30,6,5,3,'20-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (31,6,6,3,'01-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (32,1,5,3,'26-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (33,3,7,3,'15-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (34,1,4,4,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (35,6,4,1,'22-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (36,3,5,2,'06-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (37,3,9,3,'07-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (38,2,9,2,'01-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (39,4,5,4,'11-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (40,6,6,1,'30-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (41,6,8,4,'25-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (42,3,6,4,'28-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (43,5,1,1,'05-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (44,4,3,4,'27-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (45,4,6,1,'02-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (46,3,9,3,'14-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (47,1,4,1,'20-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (48,6,4,3,'14-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (49,5,10,2,'27-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (50,2,5,1,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (51,5,4,1,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (52,1,2,3,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (53,4,8,4,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (54,3,1,2,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (55,6,2,3,'24-AUG-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (56,3,2,1,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (57,4,10,4,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (58,5,6,1,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (59,6,5,4,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (60,4,2,1,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (61,1,10,2,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (62,4,2,1,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (63,5,7,3,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (64,4,7,4,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (65,5,5,3,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (66,3,7,2,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (67,6,5,3,'01-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (68,4,3,3,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (69,6,8,2,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (70,4,6,1,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (71,2,2,4,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (72,1,7,1,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (73,4,6,2,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (74,5,10,2,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (75,2,3,3,'09-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (76,2,6,3,'9-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (77,1,7,3,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (78,3,4,2,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (79,4,8,4,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (80,5,8,2,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (81,4,2,4,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (82,4,8,4,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (83,5,8,2,'13-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (84,4,2,4,'13-SEP-13');
+
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (85,3,1,2,'25-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (86,4,2,4,'25-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (87,5,1,2,'25-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (88,4,1,4,'25-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (89,4,2,4,'25-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (90,5,1,2,'25-SEP-13');
+INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (91,4,2,4,'25-SEP-13');
 
 
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020801, 2, 8, 2013, '3:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020802, 2, 8, 2013, '4:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020803, 2, 8, 2013, '5:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020804, 2, 8, 2013, '6:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013020800, 2, 8, 2013, '2:30 PM');
 
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150801, 15, 8, 2013, '1:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150802, 15, 8, 2013, '2:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150803, 15, 8, 2013, '3:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013150804, 15, 8, 2013, '4:30 PM');
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (51,10131,56);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (52,10131,57);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (53,10131,58);
 
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010900, 1, 9, 2013, '1:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010901, 1, 9, 2013, '2:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010902, 1, 9, 2013, '3:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010903, 1, 9, 2013, '4:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013010904, 1, 9, 2013, '5:30 PM');
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (54,10132,61);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (55,10132,62);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (56,10132,63);
 
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130900, 13, 9, 2013, '1:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130901, 13, 9, 2013, '2:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130902, 13, 9, 2013, '3:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130903, 13, 9, 2013, '4:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130904, 13, 9, 2013, '5:30 PM');
-INSERT INTO timetable (time_id, day, month, year, appt_time) VALUES (2013130905, 13, 9, 2013, '6:30 PM');
 
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (57,10133,64);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (58,10133,65);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (59,10133,66);
+
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (60,10128,29);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (61,10129,34);
+INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (62,10134,67);
