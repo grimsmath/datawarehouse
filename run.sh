@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java com.jetsonfuzz.java.main.MainClass
+java -jar ./dist/DataWarehouse.jar
