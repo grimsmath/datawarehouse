@@ -1,206 +1,178 @@
-DROP TABLE guardian_purchase;
-DROP TABLE visit_procedure;
-DROP TABLE visit_prescription;
-DROP TABLE visit;
-DROP TABLE med_procedure;
-DROP TABLE patient;
-DROP TABLE guardian;
-DROP TABLE doctor;
-DROP TABLE employee;
+-- DROP TABLE guardian_purchase;
+-- DROP TABLE visit_procedure;
+-- DROP TABLE visit_prescription;
+-- DROP TABLE visit;
+-- DROP TABLE med_procedure;
+-- DROP TABLE patient;
+-- DROP TABLE guardian;
+-- DROP TABLE doctor;
+-- DROP TABLE employee;
+-- DROP TABLE prescription;
+-- DROP TABLE pet_food;
+-- DROP TABLE store_trans;
+-- DROP TABLE store_item;
+-- DROP TABLE branch;
 
-DROP TABLE prescription;
-
-DROP TABLE pet_food;
-
-
-DROP TABLE store_trans;
-DROP TABLE store_item;
-
-DROP TABLE branch;
-
-CREATE TABLE guardian
-(			
-guardian_id	NUMBER(5),
-fname VARCHAR2(30),		
-lname VARCHAR2(30),		
-address	VARCHAR2(40),
-city VARCHAR2(30),		
-stateAbbr CHAR(2),
-zip NUMBER(5),
-phone VARCHAR2(10),	
-PRIMARY KEY (guardian_id)	
+CREATE TABLE guardian (			
+    guardian_id	NUMBER(5),
+    fname VARCHAR2(30),		
+    lname VARCHAR2(30),		
+    address VARCHAR2(40),
+    city VARCHAR2(30),		
+    stateAbbr CHAR(2),
+    zip NUMBER(5),
+    phone VARCHAR2(10),	
+    PRIMARY KEY (guardian_id)	
 );
 
-CREATE TABLE patient			
-(
-pet_id	VARCHAR2(5),
-patient_name VARCHAR2(20),		
-guardian_id	NUMBER(5) NOT NULL,
-species	VARCHAR2(20),		
-breed	VARCHAR2(20),		
-sex	CHAR(2),	
-age	NUMBER(4,1),
-description VARCHAR2(30),
-PRIMARY KEY (pet_id),
-CONSTRAINT fk_patient_guardianid FOREIGN KEY (guardian_id)
-REFERENCES guardian (guardian_id)
+CREATE TABLE patient (
+    pet_id VARCHAR2(5),
+    patient_name VARCHAR2(20),		
+    guardian_id	NUMBER(5) NOT NULL,
+    species VARCHAR2(20),		
+    breed VARCHAR2(20),		
+    sex	CHAR(2),	
+    age	NUMBER(4,1),
+    description VARCHAR2(30),
+    PRIMARY KEY (pet_id),
+    CONSTRAINT fk_patient_guardianid FOREIGN KEY (guardian_id)
+    REFERENCES guardian (guardian_id)
 );		
 
-
-CREATE TABLE branch
-(
-clinic_id NUMBER(2),
-clinic_name VARCHAR2(50),
-address VARCHAR2(50),
-city VARCHAR2(30),
-stateAbbr CHAR(2),
-zip NUMBER(5),
-phone VARCHAR2(10),
-PRIMARY KEY (clinic_id)
+CREATE TABLE branch (
+    clinic_id NUMBER(2),
+    clinic_name VARCHAR2(50),
+    address VARCHAR2(50),
+    city VARCHAR2(30),
+    stateAbbr CHAR(2),
+    zip NUMBER(5),
+    phone VARCHAR2(10),
+    PRIMARY KEY (clinic_id)
 );
 
-
-CREATE TABLE doctor		
-(
-vet_id	NUMBER(5),
-fname	VARCHAR2(20),	
-lname	VARCHAR2(20),	
-address	VARCHAR2(40),
-city VARCHAR2(30),		
-stateAbbr CHAR(2),
-zip NUMBER(5),	
-phone	VARCHAR2(10),	
-specialty	VARCHAR2(20),	
-PRIMARY KEY (vet_id)
+CREATE TABLE doctor (
+    vet_id NUMBER(5),
+    fname VARCHAR2(20),	
+    lname VARCHAR2(20),	
+    address VARCHAR2(40),
+    city VARCHAR2(30),		
+    stateAbbr CHAR(2),
+    zip NUMBER(5),	
+    phone VARCHAR2(10),	
+    specialty VARCHAR2(20),	
+    PRIMARY KEY (vet_id)
 );
 
-
-
-
-CREATE TABLE employee
-(
-emp_id	NUMBER(5),
-fname	VARCHAR2(20),
-lname	VARCHAR2(20),
-address	VARCHAR2(40),
-city VARCHAR2(30),		
-stateAbbr CHAR(2),
-zip NUMBER(5),	
-phone	VARCHAR2(10),
-position	VARCHAR2(10),
-start_date DATE,
-clinic_id	NUMBER(1),
-PRIMARY KEY (emp_id),
-CONSTRAINT fk_employee_clinicid FOREIGN KEY (clinic_id)
-REFERENCES branch (clinic_id)
+CREATE TABLE employee (
+    emp_id NUMBER(5),
+    fname VARCHAR2(20),
+    lname VARCHAR2(20),
+    address VARCHAR2(40),
+    city VARCHAR2(30),		
+    stateAbbr CHAR(2),
+    zip NUMBER(5),	
+    phone VARCHAR2(10),
+    position VARCHAR2(10),
+    start_date DATE,
+    clinic_id NUMBER(1),
+    PRIMARY KEY (emp_id),
+    CONSTRAINT fk_employee_clinicid FOREIGN KEY (clinic_id)
+    REFERENCES branch (clinic_id)
 );
 
-
-CREATE TABLE med_procedure 
-(
-procedure_id NUMBER(5),
-procedure_name VARCHAR2(20),
-anaesthesia_req	CHAR(1),
-hospitalization_req	CHAR(1),
-proc_cost NUMBER(6,2),
-PRIMARY KEY (procedure_id)
+CREATE TABLE med_procedure (
+    procedure_id NUMBER(5),
+    procedure_name VARCHAR2(20),
+    anaesthesia_req CHAR(1),
+    hospitalization_req	CHAR(1),
+    proc_cost NUMBER(6,2),
+    PRIMARY KEY (procedure_id)
 );
 
-CREATE TABLE visit		
-(
-visit_id NUMBER(9),
-pet_id VARCHAR2(5),
-visit_date DATE DEFAULT SYSDATE,
-clinic_id NUMBER(1),	
-PRIMARY KEY (visit_id),
-CONSTRAINT fk_visit_petid FOREIGN KEY (pet_id)
-REFERENCES patient (pet_id),
-CONSTRAINT fk_visit_clinicid FOREIGN KEY (clinic_id)
-REFERENCES branch (clinic_id)
+CREATE TABLE visit (
+    visit_id NUMBER(9),
+    pet_id VARCHAR2(5),
+    visit_date DATE DEFAULT SYSDATE,
+    clinic_id NUMBER(1),	
+    PRIMARY KEY (visit_id),
+    CONSTRAINT fk_visit_petid FOREIGN KEY (pet_id)
+    REFERENCES patient (pet_id),
+    CONSTRAINT fk_visit_clinicid FOREIGN KEY (clinic_id)
+    REFERENCES branch (clinic_id)
 );
 
-CREATE TABLE visit_procedure		
-(
-visit_id NUMBER(9),
-procedure_id NUMBER(5),
-vet_id NUMBER(5),
-PRIMARY KEY (visit_id, procedure_id),
-CONSTRAINT fk_vp_visitid FOREIGN KEY (visit_id)
-REFERENCES visit (visit_id),
-CONSTRAINT fk_vp_procedureid FOREIGN KEY (procedure_id)
-REFERENCES med_procedure (procedure_id),
-CONSTRAINT fk_vp_vetid FOREIGN KEY (vet_id)
-REFERENCES doctor (vet_id)
+CREATE TABLE visit_procedure (
+    visit_id NUMBER(9),
+    procedure_id NUMBER(5),
+    vet_id NUMBER(5),
+    PRIMARY KEY (visit_id, procedure_id),
+    CONSTRAINT fk_vp_visitid FOREIGN KEY (visit_id)
+    REFERENCES visit (visit_id),
+    CONSTRAINT fk_vp_procedureid FOREIGN KEY (procedure_id)
+    REFERENCES med_procedure (procedure_id),
+    CONSTRAINT fk_vp_vetid FOREIGN KEY (vet_id)
+    REFERENCES doctor (vet_id)
 );
 
-CREATE TABLE prescription	
-(
-script_id NUMBER(9),
-drug_id	VARCHAR2(40),
-comments VARCHAR2(80),
-PRIMARY KEY (script_id)
+CREATE TABLE prescription (
+    script_id NUMBER(9),
+    drug_id VARCHAR2(40),
+    comments VARCHAR2(80),
+    PRIMARY KEY (script_id)
 );
 
-CREATE TABLE visit_prescription	
-(
-script_id NUMBER(9),
-visit_id NUMBER(9),
-vet_id NUMBER(5),
-PRIMARY KEY (script_id, visit_id),
-CONSTRAINT fk_visproc_scriptid FOREIGN KEY (script_id)
-REFERENCES prescription (script_id),
-CONSTRAINT fk_visproc_visitid FOREIGN KEY (visit_id)
-REFERENCES visit (visit_id),
-CONSTRAINT fk_visproc_vetid FOREIGN KEY (vet_id)
-REFERENCES doctor (vet_id)
+CREATE TABLE visit_prescription (
+    script_id NUMBER(9),
+    visit_id NUMBER(9),
+    vet_id NUMBER(5),
+    PRIMARY KEY (script_id, visit_id),
+    CONSTRAINT fk_visproc_scriptid FOREIGN KEY (script_id)
+    REFERENCES prescription (script_id),
+    CONSTRAINT fk_visproc_visitid FOREIGN KEY (visit_id)
+    REFERENCES visit (visit_id),
+    CONSTRAINT fk_visproc_vetid FOREIGN KEY (vet_id)
+    REFERENCES doctor (vet_id)
 );
 
-
-create table store_item
-(
-item_id NUMBER(4),
-item_name VARCHAR2(30),
-description VARCHAR2(50),
-item_cost NUMBER(5,2),
-PRIMARY KEY (item_id)
+create table store_item (
+    item_id NUMBER(4),
+    item_name VARCHAR2(30),
+    description VARCHAR2(50),
+    item_cost NUMBER(5,2),
+    PRIMARY KEY (item_id)
 );
 
-create table pet_food
-(
-food_id NUMBER(4),
-food_name VARCHAR2(30),
-species VARCHAR2(20),
-designation VARCHAR2(50),
-PRIMARY KEY (food_id)
+create table pet_food (
+    food_id NUMBER(4),
+    food_name VARCHAR2(30),
+    species VARCHAR2(20),
+    designation VARCHAR2(50),
+    PRIMARY KEY (food_id)
 );
 
-CREATE TABLE store_trans
-(
-trans_id NUMBER(6),
-clinic_id NUMBER(2),
-item_id NUMBER(4),
-quantity NUMBER(3),
-trans_date DATE,
-PRIMARY KEY (trans_id),
-CONSTRAINT fk1 FOREIGN KEY (clinic_id)
-REFERENCES branch (clinic_id),
-CONSTRAINT fk2 FOREIGN KEY (item_id)
-REFERENCES store_item (item_id)
+CREATE TABLE store_trans (
+    trans_id NUMBER(6),
+    clinic_id NUMBER(2),
+    item_id NUMBER(4),
+    quantity NUMBER(3),
+    trans_date DATE,
+    PRIMARY KEY (trans_id),
+    CONSTRAINT fk1 FOREIGN KEY (clinic_id)
+    REFERENCES branch (clinic_id),
+    CONSTRAINT fk2 FOREIGN KEY (item_id)
+    REFERENCES store_item (item_id)
 );
 
-CREATE TABLE guardian_purchase
-(
-purch_id NUMBER(4),
-visit_id NUMBER(9),
-trans_id NUMBER(6),
-PRIMARY KEY (purch_id),
-CONSTRAINT fk_gp_visitid FOREIGN KEY (visit_id)
-REFERENCES visit (visit_id),
-CONSTRAINT fk_gp_transid FOREIGN KEY (trans_id)
-REFERENCES store_trans (trans_id)
+CREATE TABLE guardian_purchase (
+    purch_id NUMBER(4),
+    visit_id NUMBER(9),
+    trans_id NUMBER(6),
+    PRIMARY KEY (purch_id),
+    CONSTRAINT fk_gp_visitid FOREIGN KEY (visit_id)
+    REFERENCES visit (visit_id),
+    CONSTRAINT fk_gp_transid FOREIGN KEY (trans_id)
+    REFERENCES store_trans (trans_id)
 );
-
-
 
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (100,'Doris','Hardy','P.O. Box 371, 1409 Nisl. Road','Henderson','NV','23865','0818079242','cats');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (101,'Hadley','Vasquez','5700 Convallis Av.','Lakewood','CO','79238','2542384089','dogs');
@@ -216,8 +188,6 @@ INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialt
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (111,'Lars','Nash','P.O. Box 281, 490 Proin Street','Pittsburgh','PA','71618','0952330418','dogs');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (112,'Emerson','Lindsay','2705 Quam, Road','Fayetteville','AR','72480','0614114470','farm');
 INSERT INTO doctor (vet_id,fname,lname,address,city,stateAbbr,zip,phone,specialty) VALUES (113,'Raphael','Madden','7033 Neque Road','Davenport','IA','13379','4113641495','farm');
-
-
 
 INSERT INTO guardian (guardian_id,fname,lname,address,city,stateAbbr,zip,phone) VALUES (1000,'Joy','Knowles','170 Penatibus Street','Fort Collins','CO','72238','8856018736');
 INSERT INTO guardian (guardian_id,fname,lname,address,city,stateAbbr,zip,phone) VALUES (1001,'Jena','Wilson','Ap #577-1865 Magna Road','Honolulu','HI','92987','9188266489');
@@ -283,8 +253,6 @@ INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,descr
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2008,'Emi',1050,'exotic','parrot','F',17,'has good vocabulary');
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2009,'Clayton',1020,'cats','domestic','M',5,'very friendly');
 
-
-
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2010,'Jorden',1022,'dogs','terrier','M',10,'white');
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2011,'Lynn',1043,'dogs','chihuahua','F',15,'brown');
 INSERT INTO patient (pet_id,patient_name,guardian_id,species,breed,sex,age,description) VALUES (2012,'Jin',1019,'exotic','guinea pig','F',2,'loves carrots');
@@ -302,7 +270,6 @@ INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALU
 INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALUES (4,'Center Street Clinic','960-164 Nascetur St.','Cedar Rapids','IA','28305','8212591438');
 INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALUES (5,'Toms Farm Animal Clinic','Ap #228-7509 Risus Road','San Jose','CA','93667','6206464449');
 INSERT INTO branch (clinic_id,clinic_name,address,city,stateAbbr,zip,phone) VALUES (6,'Fluffy and Fido Veterinary Clinic','2892 Et, Rd.','West Valley City','UT','38792','7474338752');
-
 
 INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3000,'Emmanuel','Shepherd','118-4048 Libero. Avenue','Kansas City','KS','99317','7197750635','01-NOV-12',1);
 INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3001,'Lillith','Schwartz','P.O. Box 236, 139 Fames Rd.','Omaha','NE','72042','9449885960','13-AUG-11',1);
@@ -328,7 +295,6 @@ INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_
 INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3022,'Ann','Fuentes','Ap #680-7338 Ultrices. Rd.','Wichita','KS','57493','9041664354', '07-NOV-11',1);
 INSERT INTO employee (emp_id,fname,lname,address,city,stateAbbr,zip,phone,start_date,clinic_id) VALUES (3023,'Dara','Finch','5395 Nulla Road','Bridgeport','CT','19618','9693385631', '05-NOV-09',2);
 
-
 INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (501, 'spay/neuter', 'y', 'y', 79.99);
 INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (502, 'broken bone', 'y', 'n', 39.99);
 INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (503, 'tooth extraction', 'y', 'n', 29.99);
@@ -339,14 +305,11 @@ INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPIT
 INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (508, 'surgery', 'y', 'y', 129.99);
 INSERT INTO med_procedure (PROCEDURE_ID, PROCEDURE_NAME, ANAESTHESIA_REQ, HOSPITALIZATION_REQ, PROC_COST) VALUES (509, 'bath', 'n', 'n', 9.99);
 
-
-
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100100, 2000, '25-APR-13', 1);
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100110, 2000, '03-FEB-13', 1);
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100150, 2000, '05-MAY-12', 1);
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100160, 2001, '25-APR-13', 2);
 INSERT INTO VISIT (visit_id, pet_id, visit_date, clinic_id) VALUES (100200, 2000, '20-MAY-13', 1);
-
 
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10100,2011,'29-JUL-13',6);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10101,2012,'29-JUL-13',6);
@@ -359,7 +322,6 @@ INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10107,2012,'02-
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10108,2009,'02-AUG-13',1);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10147,2019,'02-AUG-13',1);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10230,2019,'02-AUG-13',1);
-
 
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10109,2011,'02-AUG-13',4);
 INSERT INTO visit (visit_id,pet_id,visit_date,clinic_id) VALUES (10110,2007,'02-AUG-13',4);
@@ -443,7 +405,6 @@ INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10102,502, 1
 INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10120,506, 106);
 INSERT INTO visit_procedure (visit_id,procedure_id, vet_id) VALUES (10138,501, 110);
 
-
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (100,'Zetia','take three, four times a day');
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (101,'Cyclobenzaprin HCl','take with water on empty stomach');
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (102,'Fluconazole','take once a day');
@@ -461,7 +422,6 @@ INSERT INTO prescription (script_id,drug_id,comments) VALUES (113,'Amlodipine Be
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (114,'Carisoprodol','take 3 times a day');
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (115,'Zyprexa','take twice a day for two months');
 INSERT INTO prescription (script_id,drug_id,comments) VALUES (116,'Amoxicillin','take on empty stomach');
-
 
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (113,10100, 111);
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (101,10103, 105);
@@ -491,9 +451,6 @@ INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (116,10120, 1
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (102,10135, 106);
 INSERT INTO visit_prescription (script_id,visit_id, vet_id) VALUES (111,10135, 106);
 
-
-
-
 INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (1,'Doggie Bone','rawhide dog bone', 7.99);
 INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (2,'CCC Spray','carpet cleaning spray', 12.99);
 INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (3,'Crazy Cats','cat toy', 3.99);
@@ -505,7 +462,6 @@ INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (8,'C
 INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (9,'Softee Squeezee ','dog toy', 11.99);
 INSERT INTO store_item (item_id, item_name, description, item_cost) VALUES (10,'Feather toy','cat toy', 2.99);
 
-
 INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (1000,'Xtra Health','dogs', 'for older dogs');
 INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (2000,'Diet Cat Food','cats', 'for fat cats');
 INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (4000,'Krunchy Treats','rabbits', 'rabbit pellets');
@@ -513,8 +469,6 @@ INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (4010,'Fa
 INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (1010,'Growing Strong','dogs', 'for puppies');
 INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (1020,'Joint Health','dogs', 'for older dogs');
 INSERT INTO pet_food (food_id, food_name, species, designation) VALUES (2001,'Kitten Food','cats', 'for kittens');
-
-
 
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (1,5,10,1,'18-AUG-13');
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (2,2,1,2,'24-AUG-13');
@@ -600,7 +554,6 @@ INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES 
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (82,4,8,4,'13-SEP-13');
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (83,5,8,2,'13-SEP-13');
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (84,4,2,4,'13-SEP-13');
-
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (85,3,1,2,'25-SEP-13');
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (86,4,2,4,'25-SEP-13');
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (87,5,1,2,'25-SEP-13');
@@ -609,21 +562,15 @@ INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES 
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (90,5,1,2,'25-SEP-13');
 INSERT INTO store_trans (trans_id,clinic_id,item_id,quantity,trans_date) VALUES (91,4,2,4,'25-SEP-13');
 
-
-
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (51,10131,56);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (52,10131,57);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (53,10131,58);
-
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (54,10132,61);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (55,10132,62);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (56,10132,63);
-
-
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (57,10133,64);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (58,10133,65);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (59,10133,66);
-
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (60,10128,29);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (61,10129,34);
 INSERT INTO guardian_purchase (purch_id, visit_id,trans_id) VALUES (62,10134,67);

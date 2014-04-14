@@ -251,7 +251,6 @@ public class FactTablePanel extends javax.swing.JPanel {
         btnAddNewAttribute = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         btnViewSQL = new javax.swing.JButton();
-        btnSaveTable = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Step 1: Define Fact Table"));
 
@@ -375,8 +374,8 @@ public class FactTablePanel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(5, 5, 5)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 373, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Step 4: Select Column"));
@@ -503,13 +502,6 @@ public class FactTablePanel extends javax.swing.JPanel {
             }
         });
 
-        btnSaveTable.setText("Save Table");
-        btnSaveTable.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveTableActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -517,17 +509,13 @@ public class FactTablePanel extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnViewSQL, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSaveTable, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(165, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnSaveTable, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
-                    .addComponent(btnViewSQL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnViewSQL, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -622,14 +610,6 @@ public class FactTablePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnViewSQLActionPerformed
 
-    private void btnSaveTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveTableActionPerformed
-        if (validateForm()) {
-            this._dw.getFactTables().add(saveTableDetails());
-            Util.showInfoBox("Save Fact Table", 
-                    "The fact table has been successfully saved.");
-        }
-    }//GEN-LAST:event_btnSaveTableActionPerformed
-
     private void btnRemoveAttrActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveAttrActionPerformed
         int [] selectedItems = this.listNonKeys.getSelectedIndices();
         
@@ -719,7 +699,6 @@ public class FactTablePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnRemoveKey;
     private javax.swing.JButton btnRevertChanges;
     private javax.swing.JButton btnSaveChanges;
-    private javax.swing.JButton btnSaveTable;
     private javax.swing.JButton btnViewSQL;
     private javax.swing.JCheckBox cbxAutoIncrement;
     private javax.swing.JCheckBox cbxNullable;

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public final class Warehouse {
     private Properties _props = null;
     private Database _db = null;
+    
     private ArrayList<SqlTable> _originalTables = null;
     private ArrayList<SqlTable> _newTables = null;
     private ArrayList<SqlTable> _factTables = null;

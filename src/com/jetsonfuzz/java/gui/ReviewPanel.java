@@ -20,7 +20,8 @@ public class ReviewPanel extends javax.swing.JPanel {
     private Properties _props = null;
     private Database _db = null;
     private Warehouse _dw = null;
-        
+    private String _renderedSQL = "";
+    
     /**
      * Creates new form ReviewPanel
      * @param props
@@ -37,6 +38,10 @@ public class ReviewPanel extends javax.swing.JPanel {
         renderSQL();
     }
 
+    public String getSQL() {
+        return this._renderedSQL;
+    }
+    
     private void renderSQL() {
         String text = "";
         
@@ -109,8 +114,10 @@ public class ReviewPanel extends javax.swing.JPanel {
 //            text += "\n)";
         }
                 
-        // Show all the insert commands
+        // Save the SQL for use later
+        _renderedSQL = text;
         
+        // Show all the insert commands
         this.txtSQL.setText(text);
     }
     

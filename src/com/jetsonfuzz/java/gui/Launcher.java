@@ -13,7 +13,11 @@ import com.jetsonfuzz.java.main.Constants;
 import com.jetsonfuzz.java.main.Properties;
 import com.jetsonfuzz.java.main.Util;
 import java.awt.Color;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -266,7 +270,28 @@ public class Launcher extends JFrame {
       
         // Handle the OK/Cancel button
         if(pane.getValue() != null) {
-            // User clicked OK
+            // User clicked OK, prompt the user to confirm execution
+            int result = JOptionPane.showConfirmDialog(this, 
+                        "Are you sure you want to execute the generated SQL for the star schema?", 
+                        "Confirm Star Schema Generation", 
+                        JOptionPane.YES_NO_OPTION);
+                
+            if (result == JOptionPane.YES_OPTION) {
+                // Execute the SQL
+                String sql = reviewPanel.getSQL();
+                
+                String [] statements = sql.split(";", -1);
+                
+                for (String statement : statements) {
+                    ResultSet rs = this._db.executeQuery(statement);
+
+                    try {
+                        rs.close();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }            
         }
     }//GEN-LAST:event_linkReviewActionPerformed
 
@@ -303,7 +328,15 @@ public class Launcher extends JFrame {
                     
                     // Execute the query statements
                     for (String statement : statements) {
-                        this._db.executeQuery(statement);                    
+                        String first = statement.substring(0, 2).trim();
+                        if (! first.contains("-")) {
+                            ResultSet rs = this._db.executeQuery(statement); 
+                            try {
+                                rs.close();
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Launcher.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
                     }
                     
                     this.linkInitialize.setLinkColor(Color.GREEN);

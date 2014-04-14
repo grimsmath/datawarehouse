@@ -323,14 +323,10 @@ public class SelectTablePanel extends javax.swing.JPanel {
         dialog.setVisible(true);
       
         // Handle the OK/Cancel buttons
-        if(pane.getValue() == null) {
-            // User canceled, do nothing
-        } else {
+        if(pane.getValue() != null) {
             // User clicked OK, do something
-            for (SqlTable table : this._dw.getNewTables()) {
-                this._modelDest.addElement(table);
-            }
-            
+            SqlTable customTable = dimPanel.saveTableDetails();
+            this._modelDest.addElement(customTable);
             this.listSelected.updateUI();
         }
     }//GEN-LAST:event_btnAddCustomTableActionPerformed

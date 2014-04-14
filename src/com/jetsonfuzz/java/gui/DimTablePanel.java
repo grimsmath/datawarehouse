@@ -244,7 +244,6 @@ public class DimTablePanel extends javax.swing.JPanel {
         chkAutoIncrement = new javax.swing.JCheckBox();
         jPanel7 = new javax.swing.JPanel();
         btnViewSQL = new javax.swing.JButton();
-        btnSaveCustomTable = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Source Tables"));
 
@@ -471,13 +470,6 @@ public class DimTablePanel extends javax.swing.JPanel {
             }
         });
 
-        btnSaveCustomTable.setText("Save Custom Table");
-        btnSaveCustomTable.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveCustomTableActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
@@ -485,16 +477,12 @@ public class DimTablePanel extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnViewSQL, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSaveCustomTable)
-                .addContainerGap())
+                .addGap(175, 175, 175))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnViewSQL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnSaveCustomTable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnViewSQL, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -581,15 +569,7 @@ public class DimTablePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnViewSQLActionPerformed
 
-    private void btnSaveCustomTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveCustomTableActionPerformed
-        if (validateForm()) {
-            this._dw.getNewTables().add(saveTableDetails());
-            Util.showInfoBox("Save Table", 
-                    "The custom table has been successfully saved.");
-        }
-    }//GEN-LAST:event_btnSaveCustomTableActionPerformed
-
-    private SqlTable saveTableDetails() {
+    public SqlTable saveTableDetails() {
         SqlTable newTable = new SqlTable();
 
         newTable.setOriginalName(this.txtTableName.getText());
@@ -633,7 +613,6 @@ public class DimTablePanel extends javax.swing.JPanel {
     private javax.swing.JButton btnRemoveNonKey;
     private javax.swing.JButton btnRevertChanges;
     private javax.swing.JButton btnSaveChanges;
-    private javax.swing.JButton btnSaveCustomTable;
     private javax.swing.JButton btnViewSQL;
     private javax.swing.JCheckBox cbxNullable;
     private javax.swing.JCheckBox cbxPrimaryKey;
